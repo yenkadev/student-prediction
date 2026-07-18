@@ -1,0 +1,26 @@
+Yêu cầu Giữa Kỳ
+Nộp slide
+-bài toán: dự đoán, tư vấn gì
+-dầu vào
+-đầu ra
+- nguồn dữ liệu
+      + mô tả dữ liệu
+       + EDA cơ bản: số liệu
+-EDA Data: 
+   no sample
+-pipeline 
+    vẽ xử lý
+-cách đánh giá 
+Thời gian: 5-10 phút 
+
+13/6 này mình midterm đó nhé các bạn ới, các nhóm nhớ chuẩn bị slide ngắn gọn, mỗi nhóm cỡ 10p thôi, gồm:
+- Input/output bài toán (tốt nhất nên có example)
+- Pipeline cơ bản đề từ input ra output
+- Thông tin về bộ dữ liệu: số mẫu input/output, kích thước dữ liệu nguồn bổ sung thông tin, 1 số thông tin cơ sở về bộ dữ liệu khác
+- Cách đánh giá
+- Kết quả sơ khởi của 1 pipeline 
+
+Yêu cầu chung
+Như mình đã nói nhưng có vẻ chưa rõ, đồ án trên link đăng ký nhóm là gợi ý thôi, các bạn có thể tự đề xuất các đề tài khác, miễn sao đề tài gồm 2 nguồn dữ liệu khác nhau. Ví dụ, về chứng khoán gồm thông tin giao dịch ở quá khứ (1 nguồn) và thông tin công ty (1 nguồn); về bệnh nhân gồm tiền sử bệnh án (1 nguồn), bệnh án hiện tại (ảnh CT, chỉ số lâm sàng), ... hoặc danh mục y tế, .... ; về tư vấn luật gồm câu hỏi của ng dùng và sách/văn bản luật; ... ko nhất thiết phải là hỏi đáp mà có thể là tư vấn/khuyến nghị, chọn lựa, ... Và phải so sánh ít nhất 2 loại giải pháp với nhau ở các tiêu chí (tự bạn đề xuất, trình bày luôn)
+
+Cuối kỳ nộp báo cáo giấy

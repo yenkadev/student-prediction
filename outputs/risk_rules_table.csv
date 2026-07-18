@@ -1,0 +1,11 @@
+﻿Yếu tố,Điều kiện,Điểm,Mức ảnh hưởng
+GPA,GPA < 2.0,3,Rất mạnh
+GPA,2.0 <= GPA < 2.5,1,Theo dõi
+Attendance_Rate,Attendance_Rate < 75,2,Mạnh
+Attendance_Rate,75 <= Attendance_Rate < 85,1,Theo dõi
+Stress_Index,Stress_Index >= 7,2,Mạnh
+Stress_Index,5 <= Stress_Index < 7,1,Theo dõi
+Study_Hours_per_Day,Study_Hours_per_Day < 2,1,Bổ sung
+Assignment_Delay_Days,Assignment_Delay_Days >= 3,1,Bổ sung
+Internet_Access,Internet_Access == 'No',1,Bổ sung
+Part_Time_Job,Part_Time_Job == 'Yes',1,Bổ sung

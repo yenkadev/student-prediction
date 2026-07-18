@@ -1,0 +1,4 @@
+﻿Student_ID,Dropout,GPA,Attendance_Rate,Stress_Index,Risk_Score,Risk_Level,Risk_Reasons,Recommendations
+6,0,2.52,89.1,6.0,1,Thấp,Mức độ căng thẳng cần theo dõi,Theo dõi mức độ căng thẳng định kỳ
+1,0,0.96,86.1,5.5,5,Trung bình,GPA dưới 2.0; Mức độ căng thẳng cần theo dõi; Công việc làm thêm có thể ảnh hưởng việc học,Tư vấn học tập và lập kế hoạch cải thiện GPA; Theo dõi mức độ căng thẳng định kỳ; Tư vấn cân bằng thời gian làm thêm và học tập
+2,1,1.28,68.0,6.8,6,Cao,GPA dưới 2.0; Tỷ lệ chuyên cần dưới 75%; Mức độ căng thẳng cần theo dõi,Tư vấn học tập và lập kế hoạch cải thiện GPA; Liên hệ sinh viên và xác định nguyên nhân nghỉ học; Theo dõi mức độ căng thẳng định kỳ

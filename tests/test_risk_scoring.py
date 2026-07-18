@@ -1,6 +1,6 @@
 import unittest
 
-from src import calculate_risk
+from student_prediction import calculate_risk
 
 
 class TestRiskScoring(unittest.TestCase):

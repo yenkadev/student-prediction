@@ -41,6 +41,7 @@ docs/       Báo cáo và slide
 notebooks/  EDA, ML Classification, XAI và Rule-based Scoring
 outputs/    Bảng luật và kết quả chấm điểm
 src/        Code dùng lại cho backend
+tests/      Kiểm thử tự động cho các chức năng dùng chung
 ```
 
 ## Notebook
@@ -92,6 +93,39 @@ outputs/student_risk_scored.csv
 outputs/sample_decision_outputs.csv
 ```
 
+### Sử dụng trong backend
+
+Backend có thể gọi trực tiếp hàm chấm điểm:
+
+```python
+from src import calculate_risk
+
+student = {
+    "GPA": 2.3,
+    "Attendance_Rate": 80,
+    "Stress_Index": 5,
+    "Study_Hours_per_Day": 3,
+    "Assignment_Delay_Days": 0,
+    "Internet_Access": "Yes",
+    "Part_Time_Job": "No",
+}
+
+result = calculate_risk(student)
+```
+
+Kết quả gồm:
+
+- `risk_score`: tổng điểm rủi ro.
+- `risk_level`: `Thấp`, `Trung bình` hoặc `Cao`.
+- `risk_reasons`: danh sách nguyên nhân.
+- `recommendations`: danh sách khuyến nghị.
+
+Chạy kiểm thử tự động:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
 ## Phân công
 
 | Thành viên | Phụ trách |
@@ -100,7 +134,7 @@ outputs/sample_decision_outputs.csv
 | Yến | Rule-based Scoring |
 | Tùng | Backend, AI Pipeline và LLM |
 | Lâm | Web Application |
-| TBU | Dataset 2 và tích hợp bổ sung |
+| Quân | Review báo cáo |
 
 ## Lưu ý
 

@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+models/lgbm_model.joblib
+venv/
+.venv/
+*.egg-info/
+.superpowers/
+.DS_Store

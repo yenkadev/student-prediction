@@ -1,0 +1,106 @@
+:root {
+  --color-bg: #f6f4ee;
+  --color-surface: #ffffff;
+  --color-border: #e4e1d7;
+  --color-border-soft: #efede5;
+  --color-text: #1f2430;
+  --color-text-muted: #6c7180;
+  --color-text-faint: #8a8f9c;
+  --color-accent: #b8892b;
+  --color-accent-hover: #8f6a1f;
+
+  --color-navy: #1c2340;
+  --color-navy-active: #28305a;
+
+  --color-low-bg: #e1f2e6;
+  --color-low-text: #1f7a44;
+  --color-low-dot: #2f9e58;
+
+  --color-med-bg: #fceeda;
+  --color-med-text: #a15c0a;
+  --color-med-dot: #e0a227;
+
+  --color-high-bg: #fbe3e1;
+  --color-high-text: #b23327;
+  --color-high-dot: #d8493c;
+
+  --font-sans: "IBM Plex Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+button {
+  font-family: var(--font-sans);
+}
+
+input {
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8d3c4;
+  border-radius: 4px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dotPulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

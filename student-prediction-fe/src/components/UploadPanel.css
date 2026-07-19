@@ -1,0 +1,123 @@
+.upload-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 26px;
+}
+
+.upload-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 30px 10px;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+.upload-processing__title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.upload-processing__desc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.upload-progress-track {
+  width: 100%;
+  max-width: 360px;
+  height: 8px;
+  background: var(--color-border-soft);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.upload-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 99px;
+  transition: width 0.2s ease;
+}
+
+.uploaded-file {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.uploaded-file__info {
+  flex: 1;
+}
+
+.uploaded-file__name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.uploaded-file__meta {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.uploaded-file__remove {
+  border: none;
+  background: transparent;
+  color: var(--color-text-faint);
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.upload-start-btn {
+  margin-top: 16px;
+  border: none;
+  background: var(--color-navy);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: 9px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.dropzone {
+  border: 1.5px dashed #d8d3c4;
+  border-radius: 12px;
+  padding: 44px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.dropzone:hover {
+  border-color: var(--color-accent);
+  background: #fbf9f4;
+}
+
+.dropzone__title {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.dropzone__desc {
+  font-size: 12.5px;
+  color: var(--color-text-faint);
+}
+
+.upload-hint {
+  font-size: 12.5px;
+  color: var(--color-text-faint);
+  margin-top: 12px;
+}

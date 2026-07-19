@@ -1,0 +1,123 @@
+.student-detail {
+  padding: 28px 32px;
+  max-width: 760px;
+}
+
+.student-detail__back {
+  background: none;
+  border: none;
+  color: var(--color-text-muted, #888);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.student-detail__back:hover { color: var(--color-text, #222); }
+
+.student-detail__loading,
+.student-detail__error { color: var(--color-text-muted, #888); padding: 24px 0; }
+.student-detail__error { color: #c0392b; }
+
+/* Header */
+.sd-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.sd-header__info { flex: 1; }
+.sd-header__name { font-size: 1.2rem; font-weight: 600; margin-bottom: 2px; }
+.sd-header__id { font-size: 0.82rem; color: var(--color-text-muted, #888); margin-bottom: 4px; }
+.sd-header__meta { font-size: 0.8rem; color: var(--color-text-muted, #888); }
+
+.avatar--lg {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #e8d9b0;
+  color: #7a5c1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Cards */
+.sd-card {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e3d8);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.sd-card__title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted, #888);
+  margin-bottom: 16px;
+}
+
+/* Assessment grid */
+.sd-assess-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.sd-assess-item--full { grid-column: 1 / -1; }
+.sd-assess-item__label { font-size: 0.78rem; color: var(--color-text-muted, #888); margin-bottom: 4px; }
+.sd-assess-item__value { font-size: 0.95rem; font-weight: 500; }
+.sd-assess-item__value--capitalize { text-transform: capitalize; }
+
+/* Prob bar */
+.sd-prob-row { display: flex; align-items: center; gap: 10px; }
+.sd-prob-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-border, #e8e3d8);
+  overflow: hidden;
+}
+.sd-prob-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.sd-prob-fill--low    { background: #27ae60; }
+.sd-prob-fill--medium { background: #e67e22; }
+.sd-prob-fill--high   { background: #c0392b; }
+.sd-prob-pct { font-size: 0.88rem; font-weight: 600; min-width: 36px; text-align: right; }
+
+/* Factors */
+.sd-factors {
+  margin: 6px 0 0 0;
+  padding-left: 18px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+/* Features grid */
+.sd-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.sd-feature-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--color-border, #e8e3d8);
+  font-size: 0.88rem;
+}
+.sd-feature-row:last-child { border-bottom: none; }
+.sd-feature-row__label { color: var(--color-text-muted, #888); }
+.sd-feature-row__value { font-weight: 500; }
+
+.sd-no-features {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #888);
+  padding: 4px 0 12px;
+}

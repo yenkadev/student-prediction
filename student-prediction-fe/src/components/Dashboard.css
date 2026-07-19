@@ -1,0 +1,289 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Stats row */
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: left;
+}
+
+.stat-card--clickable {
+  cursor: pointer;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.stat-card--clickable:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.stat-card__label-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.stat-card__label {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.stat-card__value {
+  font-size: 30px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.stat-card__value--low    { color: var(--color-low-text); }
+.stat-card__value--medium { color: var(--color-med-text); }
+.stat-card__value--high   { color: var(--color-high-text); }
+
+/* Action buttons row */
+.dashboard__actions-row {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.action-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg);
+}
+
+/* Main two-panel grid */
+.dashboard__main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.panel__title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+/* Session list */
+.session-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.session-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.session-row__clickarea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 7px;
+  padding: 3px 6px;
+  margin-left: -6px;
+  transition: background 0.12s;
+  min-width: 0;
+}
+.session-row__clickarea:hover {
+  background: var(--color-border-soft, #f0ece2);
+}
+
+.session-row__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.session-row__icon--batch { background: #e8f0fe; color: #3b6fd4; }
+.session-row__icon--chat  { background: #fef3e2; color: #b8892b; }
+
+.session-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.session-row__label {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-row__meta {
+  font-size: 11.5px;
+  color: var(--color-text-faint);
+  margin-top: 2px;
+}
+
+.session-row__right { flex-shrink: 0; }
+.session-row__actions { flex-shrink: 0; }
+
+.session-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted, #aaa);
+  padding: 4px 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.12s, color 0.12s, background 0.12s;
+}
+.session-row:hover .session-delete-btn { opacity: 1; }
+.session-delete-btn:hover { color: #c0392b; background: #fdecea; }
+
+.session-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.session-delete-confirm__label {
+  font-size: 11.5px;
+  color: var(--color-text-muted, #888);
+}
+.session-delete-confirm__yes,
+.session-delete-confirm__no {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.session-delete-confirm__yes { background: #c0392b; color: #fff; }
+.session-delete-confirm__no  { background: var(--color-border, #e8e3d8); color: var(--color-text, #222); }
+
+.session-view-all {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 0;
+  background: none;
+  border: 1px solid var(--color-border, #e8e3d8);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--color-text-muted, #888);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.session-view-all:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* Status chips */
+.status-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.status-chip--done        { background: #e6f4ea; color: #27ae60; }
+.status-chip--in_progress { background: #fef9e2; color: #b8892b; }
+.status-chip--failed      { background: #fdecea; color: #c0392b; }
+
+/* Activity list (recent students) */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.activity-row--clickable {
+  cursor: pointer;
+  border-radius: 9px;
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  transition: background 0.12s;
+}
+.activity-row--clickable:hover {
+  background: var(--color-border-soft, #f0ece2);
+}
+
+.activity-row__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.activity-row__name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.activity-row__meta {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  margin-top: 1px;
+}
+
+.activity-empty,
+.activity-loading,
+.activity-error {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  padding: 8px 0 4px;
+}
+.activity-error { color: #c0392b; }

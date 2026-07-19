@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+motor
+python-dotenv
+google-genai
+pandas
+openpyxl
+pydantic
+lightgbm
+shap
+optuna
+scikit-learn
+joblib

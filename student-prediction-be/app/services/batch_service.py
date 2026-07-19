@@ -1,10 +1,21 @@
 import io
+import math
 import uuid
+from datetime import datetime, timezone
 
 import pandas as pd
 
 from app.db.client import get_db
 from app.services import risk_service
+
+
+def _to_native(val):
+    """Convert numpy/pandas scalar to a native Python type for MongoDB BSON.
+    NaN → None so it serialises to JSON null instead of crashing FastAPI."""
+    v = val.item() if hasattr(val, "item") else val
+    if isinstance(v, float) and math.isnan(v):
+        return None
+    return v
 
 ML_REQUIRED = [
     "name", "studentId", "Gender", "Internet_Access", "Part_Time_Job",
@@ -19,7 +30,7 @@ RULE_BASED_REQUIRED = [
 ]
 
 
-async def create_job(prediction_type: str) -> str:
+async def create_job(prediction_type: str, filename: str) -> str:
     """Create a new batch job document. Returns job_id."""
     db = get_db()
     job_id = str(uuid.uuid4())
@@ -28,6 +39,8 @@ async def create_job(prediction_type: str) -> str:
         "status": "processing",
         "progress": 0,
         "predictionType": prediction_type,
+        "filename": filename,
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "results": [],
         "error": None,
     })
@@ -70,6 +83,8 @@ async def process_job(job_id: str, file_bytes: bytes, filename: str, prediction_
                 "studentId": str(row["studentId"]),
                 "reviewed": False,
                 "assessment": assessment,
+                "assessed_at": datetime.now(timezone.utc).isoformat(),
+                "features": {col: _to_native(fields[col]) for col in fields},
             })
             progress = int((i + 1) / total * 100)  # type: ignore[operator]
             await db.batch_jobs.update_one(
@@ -79,7 +94,12 @@ async def process_job(job_id: str, file_bytes: bytes, filename: str, prediction_
 
         await db.batch_jobs.update_one(
             {"_id": job_id},
-            {"$set": {"status": "done", "progress": 100, "results": results}}
+            {"$set": {
+                "status": "done",
+                "progress": 100,
+                "results": results,
+                "completed_at": datetime.now(timezone.utc).isoformat(),
+            }}
         )
 
     except Exception as e:

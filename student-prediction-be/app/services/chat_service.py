@@ -61,6 +61,13 @@ async def process_chat(message: str, conversation_id: str | None, prediction_typ
     if not missing:
         # All fields present — run prediction
         assessment = risk_service.assess(conv["fields"], prediction_type)
+        await db.conversations.update_one(
+            {"_id": conversation_id},
+            {"$set": {
+                "assessment": assessment,
+                "assessed_at": datetime.now(timezone.utc).isoformat(),
+            }}
+        )
         return {
             "type": "result",
             "conversationId": conversation_id,

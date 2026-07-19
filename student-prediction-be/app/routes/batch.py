@@ -1,4 +1,5 @@
-from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile, Form
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Response, UploadFile, Form
+from app.db.client import get_db
 from app.schemas.batch import BatchSubmitResponse, BatchJobResponse
 from app.services import batch_service
 
@@ -21,7 +22,7 @@ async def submit_batch(
     file_bytes = await file.read()
     if len(file_bytes) > 50 * 1024 * 1024:  # 50 MB
         raise HTTPException(status_code=413, detail="File too large (max 50 MB)")
-    job_id = await batch_service.create_job(predictionType)
+    job_id = await batch_service.create_job(predictionType, filename)
 
     background_tasks.add_task(
         batch_service.process_job,
@@ -46,3 +47,12 @@ async def get_batch_job(job_id: str) -> BatchJobResponse:
         results=job.get("results") if job["status"] == "done" else None,
         error=job.get("error"),
     )
+
+
+@router.delete("/predict/batch/{job_id}", status_code=204)
+async def delete_batch_job(job_id: str) -> Response:
+    db = get_db()
+    result = await db.batch_jobs.delete_one({"_id": job_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
+    return Response(status_code=204)

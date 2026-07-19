@@ -4,29 +4,74 @@ FastAPI backend for the Early Academic Risk Warning System.
 
 ## Setup
 
-```bash
-# 1. Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+### Step 1 — Create a virtual environment
 
-# 2. Install student-prediction as editable package
+Pick either **venv** (built-in) or **conda** (if you have Anaconda/Miniconda).
+
+**Option A: venv**
+```bash
+python -m venv .venv
+
+# Activate
+source .venv/bin/activate        # macOS / Linux
+.venv\Scripts\activate           # Windows
+```
+
+**Option B: conda**
+```bash
+conda create -n student-be python=3.11 -y
+conda activate student-be
+```
+
+To deactivate later: `deactivate` (venv) or `conda deactivate` (conda).
+
+---
+
+### Step 2 — Install dependencies
+
+```bash
+# Install the parent student-prediction package in editable mode
 pip install -e ..
 
-# 3. Install dependencies
+# Install BE dependencies
 pip install -r requirements.txt
+```
 
-# 4. Copy env and fill in your keys
+---
+
+### Step 3 — Configure environment
+
+```bash
 cp .env.example .env
-# Edit .env — set GEMINI_API_KEY and optionally MONGODB_URL
+```
 
-# 5. Start MongoDB (see section below)
+Edit `.env` — see the [Environment Variables](#environment-variables) section below for what to fill in.
 
-# 6. Train the ML model (first time only — takes ~5 min)
+---
+
+### Step 4 — Start MongoDB
+
+See the [MongoDB Setup](#mongodb-setup-docker) section below.
+
+---
+
+### Step 5 — Train the ML model (first time only)
+
+```bash
 python scripts/train_model.py
+```
 
-# 7. Start the server
+Takes ~5 minutes. Saves `models/lgbm_model.joblib` and `models/feature_names.json`. Only needed once — skip if those files already exist.
+
+---
+
+### Step 6 — Start the server
+
+```bash
 uvicorn app.main:app --reload --port 8000
 ```
+
+Verify: `curl http://localhost:8000/health` → `{"status":"ok"}`
 
 ---
 

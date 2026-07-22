@@ -1,10 +1,10 @@
 import { MOCK_STUDENTS } from "./mockData";
 import type {
+  AssessmentOptions,
   BatchJobResponse,
-  BatchSubmitResponse,
+  BatchSyncResponse,
   ChatRequest,
   ChatResponse,
-  RiskWarningApiClient,
   StudentDetailResponse,
 } from "./types";
 
@@ -13,7 +13,6 @@ function delay<T>(value: T, ms: number): Promise<T> {
 }
 
 let conversationCounter = 0;
-let jobCounter = 0;
 
 interface JobState {
   progress: number;
@@ -22,7 +21,7 @@ interface JobState {
 
 const jobs = new Map<string, JobState>();
 
-export class MockRiskWarningApiClient implements RiskWarningApiClient {
+export class MockRiskWarningApiClient {
   async predictChat(request: ChatRequest): Promise<ChatResponse> {
     const conversationId = request.conversationId ?? `conv-${++conversationCounter}`;
     const isFirstTurn = !request.conversationId;
@@ -44,9 +43,20 @@ export class MockRiskWarningApiClient implements RiskWarningApiClient {
         type: "result",
         conversationId,
         data: {
+          dataSource: request.dataSource,
+          solutionType: request.predictionType,
+          prediction: "Dropout",
+          riskScore: 0.74,
           statusLabel: "Dropout",
           riskLevel: "high",
           riskProb: 0.74,
+          scoreType: request.predictionType === "ml" ? "probability" : "normalized_rule_score",
+          recommendations: ["Financial aid outreach", "Personal counseling"],
+          riskFactors: [
+            "Tuition fees overdue by 2 installments",
+            "Failed 2 of 5 courses this term",
+            "Attendance around 70% — missed multiple classes",
+          ],
           recommendation: "Financial aid outreach, Personal counseling",
           factors: [
             "Tuition fees overdue by 2 installments",
@@ -59,10 +69,8 @@ export class MockRiskWarningApiClient implements RiskWarningApiClient {
     );
   }
 
-  async submitBatch(_file: File): Promise<BatchSubmitResponse> {
-    const jobId = `job-${++jobCounter}`;
-    jobs.set(jobId, { progress: 0, status: "processing" });
-    return delay({ jobId }, 200);
+  async submitBatch(_file: File, _options: AssessmentOptions): Promise<BatchSyncResponse> {
+    return delay({ results: MOCK_STUDENTS }, 300);
   }
 
   async getBatchJob(jobId: string): Promise<BatchJobResponse> {
@@ -89,6 +97,7 @@ export class MockRiskWarningApiClient implements RiskWarningApiClient {
     return delay<StudentDetailResponse>(
       {
         ...found,
+        reviewed: found.reviewed ?? false,
         source: "batch",
         assessed_at: new Date(Date.now() - 3600_000).toISOString(),
         features: {

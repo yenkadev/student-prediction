@@ -1,0 +1,20 @@
+﻿data_source,factor,condition,points
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 2,< 0.50,3
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 2,0.50 đến < 0.75,1
+student_dropout_and_success,Điểm học kỳ 2,< 10,2
+student_dropout_and_success,Điểm học kỳ 2,10 đến < 12,1
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 1,< 0.50,2
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 1,0.50 đến < 0.75,1
+student_dropout_and_success,Học phí,Chưa đóng đúng hạn,2
+student_dropout_and_success,Công nợ,Có nợ,1
+student_dropout_and_success,Không tham gia đánh giá học kỳ 2,>= 2 môn,1
+student_dropout,GPA,< 2.0,3
+student_dropout,GPA,2.0 đến < 2.5,1
+student_dropout,Tỷ lệ chuyên cần,< 75%,2
+student_dropout,Tỷ lệ chuyên cần,75% đến < 85%,1
+student_dropout,Mức độ căng thẳng,>= 7,2
+student_dropout,Mức độ căng thẳng,5 đến < 7,1
+student_dropout,Thời gian tự học,< 2 giờ/ngày,1
+student_dropout,Nộp bài trễ,>= 3 ngày,1
+student_dropout,Truy cập Internet,Không có,1
+student_dropout,Công việc làm thêm,Có,1

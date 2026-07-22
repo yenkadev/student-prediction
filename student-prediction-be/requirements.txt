@@ -11,3 +11,5 @@ shap
 optuna
 scikit-learn
 joblib
+python-multipart
+httpx

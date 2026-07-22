@@ -121,3 +121,40 @@
   color: var(--color-text-faint);
   margin-top: 12px;
 }
+
+.dropzone--dragging {
+  border-color: var(--color-accent);
+  background: #fbf5e7;
+  box-shadow: 0 0 0 3px rgba(184, 137, 43, 0.12);
+}
+
+.upload-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e7b8b8;
+  border-radius: 8px;
+  background: #fff2f2;
+  color: #9b2c2c;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .upload-panel {
+    padding: 16px;
+  }
+
+  .dropzone {
+    padding: 30px 12px;
+  }
+
+  .uploaded-file {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .uploaded-file__name,
+  .uploaded-file__meta {
+    overflow-wrap: anywhere;
+  }
+}

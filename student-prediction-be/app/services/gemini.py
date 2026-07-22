@@ -21,26 +21,11 @@ def _get_client() -> genai.Client:
         _client = genai.Client(api_key=api_key)
     return _client
 
-# Fields required per prediction type
-ML_FIELDS = [
-    "Gender", "Internet_Access", "Part_Time_Job", "Scholarship", "Semester",
-    "Department", "Parental_Education", "Age", "Family_Income",
-    "Study_Hours_per_Day", "Attendance_Rate", "Assignment_Delay_Days",
-    "Travel_Time_Minutes", "Stress_Index", "GPA", "Semester_GPA", "CGPA"
-]
-RULE_BASED_FIELDS = [
-    "GPA", "Attendance_Rate", "Stress_Index", "Study_Hours_per_Day",
-    "Assignment_Delay_Days", "Internet_Access", "Part_Time_Job"
-]
-
-
-async def extract_fields(turns: list[dict], prediction_type: str) -> dict:
+async def extract_fields(turns: list[dict], required_fields: list[str]) -> dict:
     """
     Given conversation turns, ask Gemini to extract all available field values.
     Returns a dict of {field_name: value_or_None}.
     """
-    required_fields = ML_FIELDS if prediction_type == "ml" else RULE_BASED_FIELDS
-
     conversation_text = "\n".join(
         f"{t['role'].upper()}: {t['content']}" for t in turns
     )
@@ -82,7 +67,7 @@ Return ONLY the JSON object, no markdown, no explanation."""
     return result
 
 
-async def generate_followup_question(turns: list[dict], missing_fields: list[str], prediction_type: str) -> str:
+async def generate_followup_question(turns: list[dict], missing_fields: list[str]) -> str:
     """
     Ask Gemini to generate a natural follow-up question asking for the missing fields.
     """

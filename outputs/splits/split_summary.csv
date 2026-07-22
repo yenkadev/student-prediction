@@ -1,0 +1,7 @@
+﻿nguon_du_lieu,split,so_dong,so_ca_bo_hoc,ty_le_du_lieu_phan_tram,ty_le_bo_hoc_phan_tram
+student_dropout_and_success.csv,test,545,213,15.01,39.08
+student_dropout_and_success.csv,train,2540,995,69.97,39.17
+student_dropout_and_success.csv,validation,545,213,15.01,39.08
+student_dropout.csv,test,1500,353,15.0,23.53
+student_dropout.csv,train,7000,1648,70.0,23.54
+student_dropout.csv,validation,1500,353,15.0,23.53

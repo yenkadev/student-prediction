@@ -121,3 +121,26 @@
   color: var(--color-text-muted, #888);
   padding: 4px 0 12px;
 }
+
+@media (max-width: 760px) {
+  .student-detail {
+    padding: 0;
+  }
+
+  .sd-header {
+    flex-wrap: wrap;
+  }
+
+  .sd-card {
+    padding: 16px;
+  }
+
+  .sd-assess-grid,
+  .sd-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sd-assess-item--full {
+    grid-column: 1;
+  }
+}

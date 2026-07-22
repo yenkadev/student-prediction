@@ -13,10 +13,16 @@ async def predict_chat(request: ChatRequest) -> dict:
             message=request.message,
             conversation_id=request.conversationId,
             prediction_type=request.predictionType,
+            data_source=request.dataSource,
         )
         return result
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
+    except RuntimeError as error:
+        message = str(error)
+        if "GEMINI_API_KEY" in message:
+            message = "Gemini chưa được cấu hình. Hãy bổ sung GEMINI_API_KEY trong file .env."
+        raise HTTPException(status_code=503, detail=message) from error
 
 
 @router.delete("/conversations/{conversation_id}", status_code=204)
@@ -36,6 +42,8 @@ async def get_conversation(conversation_id: str) -> dict:
         raise HTTPException(status_code=404, detail=f"Conversation {conversation_id!r} not found")
     return {
         "id": conv["_id"],
+        "dataSource": conv.get("dataSource", "student_dropout"),
+        "predictionType": conv.get("predictionType", "ml"),
         "turns": conv.get("turns", []),
         "fields": conv.get("fields", {}),
         "assessment": conv.get("assessment"),

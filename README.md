@@ -20,7 +20,7 @@ Hệ thống cung cấp:
 - File: `data/student_dropout_and_success.csv`
 - Quy mô: 4.424 dòng, 35 cột.
 - Target: `Dropout`, `Enrolled`, `Graduate`.
-- Sử dụng cho bài toán ML Classification.
+- Được đánh giá độc lập bằng ML Classification và Rule-based Scoring.
 
 ### Dataset 2: Student Dropout Prediction
 
@@ -28,7 +28,7 @@ Hệ thống cung cấp:
 - Quy mô: 10.000 dòng, 19 cột.
 - Target: `Dropout`, gồm `0` và `1`.
 - Có missing values ở một số thuộc tính.
-- Sử dụng cho Rule-based Scoring và giải thích rủi ro.
+- Được đánh giá độc lập bằng ML Classification và Rule-based Scoring.
 - Đây là dữ liệu mô phỏng, vì vậy kết quả cần được kiểm chứng lại trên dữ liệu thực tế trước khi triển khai.
 
 Hai dataset không có khóa sinh viên chung nên không được nối theo từng dòng. Kết quả của chúng được kết hợp tại tầng hỗ trợ ra quyết định.
@@ -40,7 +40,7 @@ app/        Web application layer (React + TypeScript + Vite)
 data/       Dữ liệu đầu vào
 docs/       Báo cáo và slide
 notebooks/  EDA, ML Classification, XAI và Rule-based Scoring
-outputs/    Bảng luật và kết quả chấm điểm
+outputs/    Dữ liệu đã chia, mô hình, dự đoán và kết quả đánh giá
 src/        Code dùng lại cho backend
 tests/      Kiểm thử tự động cho các chức năng dùng chung
 ```
@@ -49,8 +49,10 @@ tests/      Kiểm thử tự động cho các chức năng dùng chung
 
 ```text
 notebooks/01_eda.ipynb
+notebooks/02_prepare_data.ipynb
 notebooks/02_ml_classification_xai.ipynb
 notebooks/03_rule_based_scoring.ipynb
+notebooks/04_solution_comparison.ipynb
 ```
 
 ## Cài đặt
@@ -65,6 +67,37 @@ python -m pip install -r requirements.txt
 ```
 
 Mở notebook bằng VS Code hoặc Jupyter, chọn Python kernel trong `.venv`, sau đó chạy các ô theo thứ tự từ trên xuống.
+
+## Chạy hệ thống tích hợp
+
+Các notebook phải được chạy trước để tạo model, cấu hình luật và các file trong `outputs/`.
+
+Khởi động backend:
+
+```powershell
+cd student-prediction-be
+$env:PYTHONPATH='.'
+..\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
+```
+
+Mở terminal khác và khởi động frontend:
+
+```powershell
+cd student-prediction-fe
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Truy cập `http://127.0.0.1:5173`. Tại màn hình đánh giá mới, chọn đúng file nguồn và giải pháp trước khi upload dữ liệu.
+
+Hệ thống hỗ trợ đủ bốn tổ hợp:
+
+1. `student_dropout_and_success.csv` + Machine Learning.
+2. `student_dropout_and_success.csv` + Rule-based Scoring.
+3. `student_dropout.csv` + Machine Learning.
+4. `student_dropout.csv` + Rule-based Scoring.
+
+Hai nguồn không được merge theo từng dòng. Điểm Rule-based là điểm luật đã chuẩn hóa, không phải xác suất thống kê; giao diện hiển thị rõ loại điểm để tránh diễn giải sai.
 
 ## Rule-based Scoring
 

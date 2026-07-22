@@ -1,0 +1,6 @@
+﻿data_source,target_value,count,percent
+student_dropout_and_success.csv,Graduate,2209,49.93
+student_dropout_and_success.csv,Dropout,1421,32.12
+student_dropout_and_success.csv,Enrolled,794,17.95
+student_dropout.csv,0,7646,76.46
+student_dropout.csv,1,2354,23.54

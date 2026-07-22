@@ -1,0 +1,224 @@
+﻿feature,importance,method
+Curricular units 2nd sem (approved),2.6616394410920265,absolute_coefficient
+Curricular units 1st sem (approved),2.279075388387291,absolute_coefficient
+Curricular units 2nd sem (enrolled),1.5094679635727932,absolute_coefficient
+Course_16,1.3940360986209828,absolute_coefficient
+Tuition fees up to date_0,1.1481648670066387,absolute_coefficient
+Nacionality_21,1.087849808238455,absolute_coefficient
+Tuition fees up to date_1,1.051111904602001,absolute_coefficient
+Father's qualification_2,0.9927865897733427,absolute_coefficient
+Mother's qualification_19,0.9198470618681348,absolute_coefficient
+Course_10,0.9092385121155415,absolute_coefficient
+Father's occupation_12,0.8895309363959469,absolute_coefficient
+Curricular units 1st sem (enrolled),0.8522907928658748,absolute_coefficient
+Father's qualification_29,0.8448580198621987,absolute_coefficient
+Course_7,0.8235629396410584,absolute_coefficient
+Course_3,0.7677402448871254,absolute_coefficient
+Father's qualification_5,0.7470053289603806,absolute_coefficient
+Previous qualification_4,0.7468877237295302,absolute_coefficient
+Course_17,0.7367399782803579,absolute_coefficient
+Course_2,0.7329217073116928,absolute_coefficient
+Mother's qualification_4,0.7229188226274978,absolute_coefficient
+Mother's occupation_1,0.7179188143679914,absolute_coefficient
+Previous qualification_17,0.6914145596738622,absolute_coefficient
+Application mode_7,0.6514304889619231,absolute_coefficient
+Curricular units 1st sem (credited),0.6432669625846404,absolute_coefficient
+Father's occupation_10,0.6359854348426677,absolute_coefficient
+Application mode_6,0.6205973279920431,absolute_coefficient
+Nacionality_12,0.6066038174390099,absolute_coefficient
+Father's occupation_1,0.6027790687754288,absolute_coefficient
+Nacionality_9,0.5932481414085657,absolute_coefficient
+Father's qualification_10,0.5672245987701926,absolute_coefficient
+Father's qualification_33,0.56234162423173,absolute_coefficient
+Mother's qualification_10,0.556913297760071,absolute_coefficient
+Father's qualification_7,0.5482217431484387,absolute_coefficient
+Application mode_16,0.5432416255468235,absolute_coefficient
+Father's qualification_30,0.5169546724399994,absolute_coefficient
+Previous qualification_3,0.5153035329117744,absolute_coefficient
+Debtor_1,0.5132606423629498,absolute_coefficient
+Mother's occupation_9,0.5072606191181169,absolute_coefficient
+Course_6,0.5034391754557286,absolute_coefficient
+Mother's occupation_29,0.5034022612856183,absolute_coefficient
+Mother's occupation_12,0.5002035504751425,absolute_coefficient
+Application mode_12,0.4829634371312194,absolute_coefficient
+Course_4,0.4820240098025449,absolute_coefficient
+Father's occupation_5,0.4787851217921231,absolute_coefficient
+Nacionality_10,0.4763658364294409,absolute_coefficient
+Father's qualification_32,0.4737278390091542,absolute_coefficient
+Nacionality_17,0.45869014518866225,absolute_coefficient
+Course_15,0.45057227092160473,absolute_coefficient
+Nacionality_14,0.4319006373006393,absolute_coefficient
+Debtor_0,0.41620767995836566,absolute_coefficient
+Course_11,0.41344586542350337,absolute_coefficient
+Course_8,0.41190090164185333,absolute_coefficient
+Curricular units 2nd sem (grade),0.4106448310273834,absolute_coefficient
+Previous qualification_16,0.4081296753510529,absolute_coefficient
+Application mode_15,0.40041204632555627,absolute_coefficient
+Previous qualification_6,0.39407538945989773,absolute_coefficient
+Mother's qualification_26,0.39397412596677095,absolute_coefficient
+Father's qualification_9,0.3914795297330264,absolute_coefficient
+Mother's qualification_2,0.3805997556740692,absolute_coefficient
+Course_13,0.37467478629002404,absolute_coefficient
+Father's occupation_7,0.3735333158942591,absolute_coefficient
+Course_9,0.3708559202082718,absolute_coefficient
+Application mode_4,0.3615711228499291,absolute_coefficient
+Father's qualification_22,0.3595015354522171,absolute_coefficient
+Father's qualification_14,0.3450103770018988,absolute_coefficient
+Application mode_10,0.33511420669708636,absolute_coefficient
+Application mode_3,0.33438442583578626,absolute_coefficient
+Scholarship holder_0,0.33305403841832304,absolute_coefficient
+Marital status_1,0.32598137538635436,absolute_coefficient
+Unemployment rate,0.32218083364319156,absolute_coefficient
+Father's occupation_29,0.32099295743092565,absolute_coefficient
+Mother's qualification_8,0.3206652038789143,absolute_coefficient
+Father's qualification_8,0.31799186190314443,absolute_coefficient
+Mother's occupation_22,0.31540077798091765,absolute_coefficient
+Mother's qualification_25,0.3127291972688214,absolute_coefficient
+Application mode_17,0.3111805039015053,absolute_coefficient
+Mother's occupation_11,0.3104306861022555,absolute_coefficient
+Father's occupation_8,0.30472502894559655,absolute_coefficient
+Previous qualification_9,0.3016876484634683,absolute_coefficient
+Father's qualification_28,0.30012010021912877,absolute_coefficient
+Mother's qualification_17,0.29943367177168667,absolute_coefficient
+Father's qualification_27,0.2883800718657774,absolute_coefficient
+Father's occupation_2,0.28427209653391955,absolute_coefficient
+Marital status_2,0.2794595184236338,absolute_coefficient
+Marital status_5,0.27551622399708786,absolute_coefficient
+Mother's qualification_15,0.2722173643462501,absolute_coefficient
+Father's qualification_21,0.2713231556205356,absolute_coefficient
+Mother's occupation_26,0.2686334515510148,absolute_coefficient
+Father's occupation_35,0.2686334515510148,absolute_coefficient
+Mother's qualification_5,0.26324136354104366,absolute_coefficient
+Nacionality_4,0.25359543710610916,absolute_coefficient
+Application mode_1,0.25291147850984574,absolute_coefficient
+Gender_1,0.2510289306405377,absolute_coefficient
+Mother's qualification_9,0.24967557971384624,absolute_coefficient
+Application mode_5,0.24566715447552742,absolute_coefficient
+Scholarship holder_1,0.2360010760138754,absolute_coefficient
+Previous qualification_13,0.22960557689708053,absolute_coefficient
+Mother's occupation_6,0.22890155123831432,absolute_coefficient
+Mother's occupation_2,0.22650237448704152,absolute_coefficient
+Father's qualification_12,0.22559199044883596,absolute_coefficient
+Father's occupation_9,0.22344023285462847,absolute_coefficient
+Father's occupation_39,0.22233499142133317,absolute_coefficient
+International_0,0.20568358363807082,absolute_coefficient
+Nacionality_1,0.20568358363807082,absolute_coefficient
+Mother's occupation_4,0.20551549333272992,absolute_coefficient
+Previous qualification_1,0.20213153709715756,absolute_coefficient
+Previous qualification_2,0.20212172732038028,absolute_coefficient
+Father's occupation_11,0.20075061701403413,absolute_coefficient
+Mother's qualification_13,0.20018988032136634,absolute_coefficient
+Curricular units 2nd sem (without evaluations),0.19667073271209404,absolute_coefficient
+Displaced_1,0.19512460363067263,absolute_coefficient
+Father's occupation_23,0.19439144112880222,absolute_coefficient
+Mother's occupation_15,0.1926189827446711,absolute_coefficient
+Mother's occupation_32,0.18960996609281883,absolute_coefficient
+Mother's occupation_20,0.18860688374065532,absolute_coefficient
+Application mode_2,0.1740215213818396,absolute_coefficient
+Application mode_8,0.17223681133613467,absolute_coefficient
+Previous qualification_14,0.1717627423357278,absolute_coefficient
+Father's occupation_16,0.17083685713009464,absolute_coefficient
+Mother's occupation_18,0.17083685713009464,absolute_coefficient
+Curricular units 2nd sem (evaluations),0.16746660889080978,absolute_coefficient
+GDP,0.1670429760372371,absolute_coefficient
+Father's occupation_44,0.15871848400326838,absolute_coefficient
+Father's occupation_43,0.15699903037419274,absolute_coefficient
+Mother's qualification_6,0.15481702771235475,absolute_coefficient
+Gender_0,0.15397596823618795,absolute_coefficient
+Mother's occupation_5,0.15182818110195603,absolute_coefficient
+Application mode_9,0.1504054962704971,absolute_coefficient
+Application mode_18,0.1476131809853941,absolute_coefficient
+Mother's qualification_24,0.14417852746528195,absolute_coefficient
+Father's qualification_4,0.14308522957990888,absolute_coefficient
+Mother's qualification_28,0.14082755435546196,absolute_coefficient
+Marital status_3,0.135628232004966,absolute_coefficient
+Curricular units 1st sem (grade),0.13506104569211505,absolute_coefficient
+Mother's qualification_1,0.13382681584542713,absolute_coefficient
+Father's qualification_25,0.13364518926147795,absolute_coefficient
+Inflation rate,0.13328665212186444,absolute_coefficient
+Daytime/evening attendance_1,0.1280532290112964,absolute_coefficient
+Mother's qualification_7,0.12270210212495657,absolute_coefficient
+Previous qualification_12,0.12051009693263595,absolute_coefficient
+Application mode_14,0.12007181211605843,absolute_coefficient
+Father's occupation_4,0.11730212459079341,absolute_coefficient
+Application order,0.11048829540659316,absolute_coefficient
+Nacionality_3,0.10889465292968648,absolute_coefficient
+International_1,0.10863062123331456,absolute_coefficient
+Curricular units 1st sem (evaluations),0.10773038511640555,absolute_coefficient
+Father's qualification_17,0.10512674381379364,absolute_coefficient
+Father's occupation_3,0.10505576493654317,absolute_coefficient
+Application mode_13,0.10247499221293221,absolute_coefficient
+Marital status_4,0.10233062104847242,absolute_coefficient
+Father's occupation_21,0.10198155518145312,absolute_coefficient
+Father's qualification_18,0.0983765205673282,absolute_coefficient
+Displaced_0,0.09807164122616384,absolute_coefficient
+Course_1,0.09688623426553722,absolute_coefficient
+Father's qualification_24,0.0965743623655637,absolute_coefficient
+Father's occupation_26,0.09088646235734128,absolute_coefficient
+Mother's qualification_21,0.08725885195014363,absolute_coefficient
+Father's qualification_3,0.08521825002181085,absolute_coefficient
+Mother's occupation_19,0.07991534060004042,absolute_coefficient
+Father's occupation_36,0.07544217381518119,absolute_coefficient
+Mother's occupation_23,0.0744595623833691,absolute_coefficient
+Father's occupation_30,0.0744595623833691,absolute_coefficient
+Mother's qualification_22,0.071102050948474,absolute_coefficient
+Mother's qualification_20,0.06992560270318712,absolute_coefficient
+Father's occupation_41,0.06907105630081252,absolute_coefficient
+Curricular units 2nd sem (credited),0.06612637844908856,absolute_coefficient
+Educational special needs_0,0.063836043080609,absolute_coefficient
+Mother's occupation_25,0.06334579330152747,absolute_coefficient
+Father's occupation_17,0.05784153597611428,absolute_coefficient
+Father's occupation_38,0.05780305175797872,absolute_coefficient
+Curricular units 1st sem (without evaluations),0.05319937318819195,absolute_coefficient
+Mother's qualification_3,0.05197172529646708,absolute_coefficient
+Father's qualification_26,0.05102672032188659,absolute_coefficient
+Father's occupation_33,0.049187992327161506,absolute_coefficient
+Mother's qualification_18,0.04887614445267933,absolute_coefficient
+Age at enrollment,0.04666634731438369,absolute_coefficient
+Nacionality_7,0.045699298547582944,absolute_coefficient
+Mother's occupation_30,0.045414375346161814,absolute_coefficient
+Father's occupation_18,0.04243362559284351,absolute_coefficient
+Mother's occupation_13,0.04151847539985829,absolute_coefficient
+Nacionality_6,0.04014525703174187,absolute_coefficient
+Father's occupation_20,0.040104895030104004,absolute_coefficient
+Mother's qualification_16,0.03798112151625606,absolute_coefficient
+Previous qualification_15,0.036552542296179616,absolute_coefficient
+Mother's occupation_31,0.036235466763117945,absolute_coefficient
+Father's occupation_40,0.036235466763117945,absolute_coefficient
+Nacionality_18,0.035809817616300366,absolute_coefficient
+Father's qualification_1,0.03488695630700635,absolute_coefficient
+Educational special needs_1,0.033216919324104054,absolute_coefficient
+Daytime/evening attendance_0,0.031000266606746076,absolute_coefficient
+Course_5,0.03012131830613475,absolute_coefficient
+Mother's qualification_23,0.02793699532799163,absolute_coefficient
+Mother's occupation_10,0.027650591251873097,absolute_coefficient
+Mother's occupation_3,0.027147313074386625,absolute_coefficient
+Father's occupation_15,0.026568744145536827,absolute_coefficient
+Father's occupation_32,0.022991863477300166,absolute_coefficient
+Mother's occupation_8,0.019874556445103976,absolute_coefficient
+Previous qualification_8,0.018595009004284936,absolute_coefficient
+Nacionality_19,0.017012355970871182,absolute_coefficient
+Father's qualification_16,0.016318734295366046,absolute_coefficient
+Father's occupation_28,0.01623761955384271,absolute_coefficient
+Nacionality_2,0.015896853630549077,absolute_coefficient
+Mother's occupation_7,0.015120442894872733,absolute_coefficient
+Previous qualification_7,0.014027373512609393,absolute_coefficient
+Father's occupation_37,0.013892760278672714,absolute_coefficient
+Mother's occupation_21,0.013892760278672714,absolute_coefficient
+Course_12,0.013669042044029875,absolute_coefficient
+Nacionality_11,0.011444055371031636,absolute_coefficient
+Mother's occupation_24,0.009990026829552575,absolute_coefficient
+Father's occupation_13,0.009616970624989892,absolute_coefficient
+Nacionality_5,0.008857353770148778,absolute_coefficient
+Marital status_6,0.0050871456450989165,absolute_coefficient
+Course_14,0.004797464209481857,absolute_coefficient
+Father's occupation_6,0.004502534178980328,absolute_coefficient
+Father's qualification_6,0.003529651877562521,absolute_coefficient
+Father's qualification_19,0.0031102588293363343,absolute_coefficient
+Father's qualification_20,0.002364742174590816,absolute_coefficient
+Nacionality_16,0.001078356253059147,absolute_coefficient
+Father's qualification_34,0.0007822345584750147,absolute_coefficient
+Previous qualification_11,0.0007635293274563774,absolute_coefficient
+Father's qualification_11,0.0002421101276157356,absolute_coefficient
+Mother's qualification_27,5.2015458236722136e-05,absolute_coefficient
+Father's qualification_31,1.17802545928033e-05,absolute_coefficient

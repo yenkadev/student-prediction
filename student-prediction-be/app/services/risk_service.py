@@ -1,35 +1,62 @@
-from student_prediction import calculate_risk
-from app.services import ml_service
+"""Điều phối hai nguồn dữ liệu và hai loại giải pháp dự đoán."""
+
+from typing import Any
+
+from app.services import ml_service, rule_service
 
 
-def assess(fields: dict, prediction_type: str) -> dict:
-    """
-    Unified risk assessment. Routes to ML or rule-based based on prediction_type.
-    Returns a dict matching RiskAssessmentSchema.
-    """
+DATA_SOURCES = ("student_dropout_and_success", "student_dropout")
+PREDICTION_TYPES = ("ml", "rule_based")
+
+
+def validate_selection(data_source: str, prediction_type: str) -> None:
+    """Kiểm tra cặp nguồn dữ liệu và giải pháp do client gửi lên."""
+    if data_source not in DATA_SOURCES:
+        raise ValueError(
+            f"dataSource phải là một trong các giá trị: {list(DATA_SOURCES)}"
+        )
+    if prediction_type not in PREDICTION_TYPES:
+        raise ValueError(
+            f"predictionType phải là một trong các giá trị: {list(PREDICTION_TYPES)}"
+        )
+
+
+def required_fields(data_source: str, prediction_type: str) -> list[str]:
+    """Trả về schema đầu vào của đúng cặp nguồn và giải pháp."""
+    validate_selection(data_source, prediction_type)
     if prediction_type == "ml":
-        return ml_service.predict(fields)
+        return ml_service.required_fields(data_source)
+    return rule_service.required_fields(data_source)
 
-    # Rule-based path
-    result = calculate_risk(fields)
-    risk_level = result["risk_level"]  # "Cao", "Trung bình", or "Thấp"
 
-    level_map = {
-        "Cao": "high",
-        "Trung bình": "medium",
-        "Thấp": "low",
-    }
-    # Phase 1: 2-class mapping (3-class Enrolled deferred)
-    status_map = {
-        "Cao": "Dropout",
-        "Trung bình": "Graduate",
-        "Thấp": "Graduate",
-    }
+def assess(
+    fields: dict[str, Any], prediction_type: str, data_source: str
+) -> dict[str, Any]:
+    """Đánh giá rủi ro và trả về contract chuẩn cùng trường tương thích cũ."""
+    validate_selection(data_source, prediction_type)
+    if prediction_type == "ml":
+        result = ml_service.predict(fields, data_source)
+    else:
+        result = rule_service.predict(fields, data_source)
+
+    recommendations = result["recommendations"]
+    factors = result["risk_factors"]
+    score = round(float(result["risk_score"]), 6)
+    prediction = result["prediction"]
 
     return {
-        "statusLabel": status_map[risk_level],
-        "riskLevel": level_map[risk_level],
-        "riskProb": min(result["risk_score"] / 11.0, 1.0),
-        "recommendation": "; ".join(result["recommendations"]),
-        "factors": result["risk_reasons"],
+        # Các trường chuẩn dùng cho tích hợp mới.
+        "dataSource": data_source,
+        "solutionType": prediction_type,
+        "prediction": prediction,
+        "riskScore": score,
+        "riskLevel": result["risk_level"],
+        "riskFactors": factors,
+        "recommendations": recommendations,
+        "scoreType": result["score_type"],
+        # Các trường tương thích với giao diện và dữ liệu phiên bản cũ.
+        "statusLabel": prediction,
+        "riskProb": score,
+        "factors": factors,
+        "recommendation": "; ".join(recommendations),
     }

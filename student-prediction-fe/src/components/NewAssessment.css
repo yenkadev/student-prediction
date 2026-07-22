@@ -6,6 +6,70 @@
   gap: 18px;
 }
 
+.assessment-config {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(220px, 0.75fr);
+  gap: 12px 16px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.assessment-config__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.assessment-config__field select {
+  min-height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-text);
+  padding: 0 11px;
+  font: inherit;
+  font-size: 13px;
+}
+
+.assessment-config__field select:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 28%, transparent);
+  border-color: var(--color-accent);
+}
+
+.assessment-config__summary {
+  grid-column: 1 / -1;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+}
+
+@media (max-width: 760px) {
+  .new-assessment {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .assessment-config {
+    grid-template-columns: 1fr;
+  }
+
+  .assessment-config__summary {
+    grid-column: 1;
+  }
+
+  .mode-toggle {
+    width: 100%;
+  }
+
+  .mode-toggle__btn {
+    flex: 1;
+  }
+}
+
 .mode-toggle {
   display: inline-flex;
   background: var(--color-border-soft);

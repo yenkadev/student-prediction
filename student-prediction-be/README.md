@@ -1,181 +1,91 @@
-# student-prediction-BE
+# Backend cảnh báo nguy cơ bỏ học
 
-FastAPI backend for the Early Academic Risk Warning System.
+FastAPI backend phục vụ hai nguồn dữ liệu và hai giải pháp của đồ án:
 
-## Setup
+| Nguồn dữ liệu | Machine Learning | Rule-based Scoring |
+|---|---:|---:|
+| `student_dropout_and_success` | Có | Có |
+| `student_dropout` | Có | Có |
 
-### Step 1 — Create a virtual environment
+Hai nguồn được xử lý độc lập, không merge theo sinh viên. Model và cấu hình luật được đọc từ thư mục `../outputs/` đã tạo bởi các notebook thí nghiệm.
 
-Pick either **venv** (built-in) or **conda** (if you have Anaconda/Miniconda).
+## Cài đặt
 
-**Option A: venv**
-```bash
+Từ thư mục gốc của repository:
+
+```powershell
 python -m venv .venv
-
-# Activate
-source .venv/bin/activate        # macOS / Linux
-.venv\Scripts\activate           # Windows
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -r student-prediction-be\requirements.txt
 ```
 
-**Option B: conda**
-```bash
-conda create -n student-be python=3.11 -y
-conda activate student-be
+## Chạy API
+
+```powershell
+cd student-prediction-be
+$env:PYTHONPATH='.'
+..\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
 ```
 
-To deactivate later: `deactivate` (venv) or `conda deactivate` (conda).
+Kiểm tra tại `http://localhost:8000/health` hoặc tài liệu Swagger tại `http://localhost:8000/docs`.
 
----
+## API không cần dịch vụ ngoài
 
-### Step 2 — Install dependencies
+### Dự đoán một sinh viên
 
-```bash
-# Install the parent student-prediction package in editable mode
-pip install -e ..
+`POST /predict/single`
 
-# Install BE dependencies
-pip install -r requirements.txt
+```json
+{
+  "dataSource": "student_dropout",
+  "predictionType": "ml",
+  "features": {
+    "GPA": 2.3,
+    "Attendance_Rate": 70,
+    "Stress_Index": 8,
+    "Study_Hours_per_Day": 2,
+    "Assignment_Delay_Days": 4,
+    "Internet_Access": "Yes",
+    "Part_Time_Job": "No"
+  }
+}
 ```
 
----
+### Dự đoán từ file CSV/XLSX
 
-### Step 3 — Configure environment
+`POST /predict/batch/sync`
 
-```bash
-cp .env.example .env
+```powershell
+curl.exe -X POST http://localhost:8000/predict/batch/sync `
+  -F "file=@../outputs/splits/student_dropout_test.csv" `
+  -F "dataSource=student_dropout" `
+  -F "predictionType=rule_based"
 ```
 
-Edit `.env` — see the [Environment Variables](#environment-variables) section below for what to fill in.
+API trả kết quả ngay và không cần MongoDB. File phải chứa đủ các feature tương ứng với nguồn dữ liệu đã chọn. Có thể chọn `ml` hoặc `rule_based`.
 
----
+## Chức năng cần MongoDB hoặc Gemini
 
-### Step 4 — Start MongoDB
+- `POST /predict/chat`: cần MongoDB để lưu hội thoại và `GEMINI_API_KEY` để trích xuất thông tin từ văn bản tự nhiên.
+- `POST /predict/batch`: phiên bản xử lý nền, cần MongoDB để lưu trạng thái job.
+- `POST /predict/batch/sync` và `POST /predict/single`: không cần MongoDB hoặc Gemini.
 
-See the [MongoDB Setup](#mongodb-setup-docker) section below.
+Sao chép `.env.example` thành `.env` nếu sử dụng chat hoặc batch nền:
 
----
-
-### Step 5 — Train the ML model (first time only)
-
-```bash
-python scripts/train_model.py
-```
-
-Takes ~5 minutes. Saves `models/lgbm_model.joblib` and `models/feature_names.json`. Only needed once — skip if those files already exist.
-
----
-
-### Step 6 — Start the server
-
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-Verify: `curl http://localhost:8000/health` → `{"status":"ok"}`
-
----
-
-## MongoDB Setup (Docker)
-
-The backend uses MongoDB to store conversations and batch job state. Collections are created automatically on first write — no migration needed.
-
-```bash
-docker run -d \
-  --name mongo-student \
-  -p 27017:27017 \
-  mongo:7
-```
-
-The connection string for this container is:
-```
-mongodb://localhost:27017
-```
-
-That is the default value already in `.env.example`, so **no change is needed in `.env`** for local Docker.
-
-**Manage the container:**
-```bash
-docker stop mongo-student    # stop (data is preserved)
-docker start mongo-student   # restart
-docker rm -f mongo-student   # delete container and all data
-```
-
-**Verify it is running:**
-```bash
-docker exec mongo-student mongosh --eval "db.adminCommand('ping')"
-# Expected output: { ok: 1 }
-```
-
-| Setting | Value |
-|---|---|
-| Database name | `student_risk_db` |
-| Collections | `conversations`, `batch_jobs` |
-| Default URL | `mongodb://localhost:27017` |
-
----
-
-## Environment Variables
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and fill in the two variables:
-
-### `GEMINI_API_KEY` (required)
-
-Used by the chat endpoint to extract student fields from free-text messages.
-
-1. Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
-2. Click **Create API key**
-3. Copy the key — it starts with `AIza`
-
-```
-GEMINI_API_KEY=AIzaSy...
-```
-
-### `MONGODB_URL` (optional)
-
-Defaults to `mongodb://localhost:27017` which matches the Docker container above. Only change this if you use a remote database (e.g. MongoDB Atlas):
-
-1. Create a free cluster at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Go to **Database Access** → add a user with read/write role
-3. Go to **Network Access** → add your IP address
-4. Click **Connect** → **Drivers** → copy the connection string
-5. Replace `<password>` with your user's password
-
-```
-MONGODB_URL=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority
-```
-
-**Resulting `.env` file:**
-```
-GEMINI_API_KEY=AIzaSy...
+```env
+GEMINI_API_KEY=your_key
 MONGODB_URL=mongodb://localhost:27017
 ```
 
----
+## Kiểm thử
 
-## Testing the Batch Endpoint
+Từ thư mục `student-prediction-be`:
 
-Sample Excel files are provided in `tests/`:
-
-```bash
-# rule_based mode (7 feature columns)
-curl -X POST http://localhost:8000/predict/batch \
-  -F "file=@tests/test_batch_rule_based.xlsx" \
-  -F "predictionType=rule_based"
-
-# ml mode (17 feature columns)
-curl -X POST http://localhost:8000/predict/batch \
-  -F "file=@tests/test_batch_ml.xlsx" \
-  -F "predictionType=ml"
+```powershell
+$env:PYTHONPATH='.'
+..\.venv\Scripts\python.exe -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Both return `{"jobId": "..."}`. Poll for results:
-
-```bash
-curl http://localhost:8000/predict/batch/<jobId>
-```
-
-The response moves from `status: "processing"` to `status: "done"` with a `results` array.
+Bộ kiểm thử xác nhận cả bốn tổ hợp nguồn dữ liệu × giải pháp, upload đồng bộ và trường hợp thiếu feature.

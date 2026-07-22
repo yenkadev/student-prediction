@@ -106,6 +106,12 @@
   padding: 14px 16px 16px 16px;
 }
 
+.result-card__meta {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
 .result-card__section-label {
   font-size: 12px;
   font-weight: 600;
@@ -118,6 +124,13 @@
 .result-card__recommendation {
   font-size: 14px;
   margin-bottom: 14px;
+}
+
+.result-card__recommendation-list {
+  margin: 0 0 14px 18px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .result-card__factors {
@@ -186,4 +199,27 @@
   padding: 0 20px;
   border-radius: 9px;
   cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .chat-panel {
+    min-height: 480px;
+  }
+
+  .chat-panel__scroll {
+    padding: 14px;
+  }
+
+  .chat-bubble,
+  .result-card {
+    max-width: 94%;
+  }
+
+  .chat-panel__input-row {
+    padding: 10px;
+  }
+
+  .chat-send-btn {
+    padding: 0 14px;
+  }
 }

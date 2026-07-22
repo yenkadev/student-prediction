@@ -19,29 +19,28 @@ const FILTERS: { value: FilterLevel; label: string }[] = [
   { value: "high", label: "High" },
 ];
 
-function exportCsv(students: Student[]) {
-  const header = "Student,Student ID,Predicted,Risk %,Risk Level,Recommendation\n";
+function escapeCsvCell(value: unknown): string {
+  const text = String(value ?? "");
+  return `"${text.replaceAll('"', '""')}"`;
+}
+
+function buildCsv(students: Student[]): string {
+  const header = "Student,Student ID,Data Source,Solution,Predicted,Risk Score,Risk Level,Recommendation\n";
   const body = students
     .map((s) =>
       [
         s.name,
         s.studentId,
+        s.assessment.dataSource,
+        s.assessment.solutionType,
         s.assessment.statusLabel,
         `${Math.round(s.assessment.riskProb * 100)}%`,
         s.assessment.riskLevel,
-        `"${s.assessment.recommendation}"`,
-      ].join(","),
+        s.assessment.recommendation,
+      ].map(escapeCsvCell).join(","),
     )
     .join("\n");
-  const blob = new Blob([header + body], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "risk-warning-batch-results.csv";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  return `\ufeff${header}${body}`;
 }
 
 export function BatchResults({ students, onGoToUpload, onToggleReviewed, onSelectStudent }: BatchResultsProps) {
@@ -55,6 +54,11 @@ export function BatchResults({ students, onGoToUpload, onToggleReviewed, onSelec
       .sort((a, b) => (sortDesc ? b.assessment.riskProb - a.assessment.riskProb : a.assessment.riskProb - b.assessment.riskProb));
     return rows;
   }, [students, filter, sortDesc]);
+
+  const exportHref = useMemo(
+    () => `data:text/csv;charset=utf-8,${encodeURIComponent(buildCsv(visibleRows))}`,
+    [visibleRows],
+  );
 
   if (students.length === 0) {
     return (
@@ -92,9 +96,13 @@ export function BatchResults({ students, onGoToUpload, onToggleReviewed, onSelec
             <span>{sortDesc ? "↓" : "↑"}</span>
           </button>
         </div>
-        <button type="button" className="export-btn" onClick={() => exportCsv(visibleRows)}>
+        <a
+          className="export-btn"
+          href={exportHref}
+          download="risk-warning-batch-results.csv"
+        >
           Export CSV
-        </button>
+        </a>
       </div>
 
       <div className="batch-table">
@@ -121,7 +129,12 @@ export function BatchResults({ students, onGoToUpload, onToggleReviewed, onSelec
                 <div className="batch-row__id">{row.studentId}</div>
               </div>
             </div>
-            <div className="batch-row__predicted">{row.assessment.statusLabel}</div>
+            <div className="batch-row__predicted">
+              <div>{row.assessment.statusLabel}</div>
+              <div className="batch-row__method">
+                {row.assessment.dataSource}.csv · {row.assessment.solutionType === "ml" ? "ML" : "Rule-based"}
+              </div>
+            </div>
             <div>
               <RiskBadge level={row.assessment.riskLevel} riskProb={row.assessment.riskProb} short />
             </div>

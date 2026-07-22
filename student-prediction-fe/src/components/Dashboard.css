@@ -287,3 +287,34 @@
   padding: 8px 0 4px;
 }
 .activity-error { color: #c0392b; }
+
+@media (max-width: 760px) {
+  .dashboard__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px;
+  }
+
+  .stat-card__value {
+    font-size: 24px;
+  }
+
+  .dashboard__actions-row {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    justify-content: center;
+  }
+
+  .dashboard__main {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+}

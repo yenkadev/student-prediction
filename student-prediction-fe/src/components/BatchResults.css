@@ -108,6 +108,7 @@
 .batch-row {
   display: grid;
   grid-template-columns: 1.7fr 1.1fr 1fr 1.6fr 32px;
+  column-gap: 16px;
   align-items: center;
 }
 

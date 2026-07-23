@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class RecentSessionItem(BaseModel):
     id: str
-    type: Literal["chat", "batch"]
+    type: Literal["chat", "batch", "form"]
     label: str
     createdAt: str
     status: Literal["in_progress", "done", "failed"]

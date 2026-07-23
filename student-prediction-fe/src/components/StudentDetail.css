@@ -101,20 +101,34 @@
 /* Features grid */
 .sd-features-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  /* Two columns when there's room, collapsing to one on narrow screens so a
+     value never sits against the next column's label. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  column-gap: 40px;
+  row-gap: 0;
 }
 .sd-feature-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 16px;
+  min-width: 0;
   padding: 9px 0;
   border-bottom: 1px solid var(--color-border, #e8e3d8);
   font-size: 0.88rem;
 }
-.sd-feature-row:last-child { border-bottom: none; }
-.sd-feature-row__label { color: var(--color-text-muted, #888); }
-.sd-feature-row__value { font-weight: 500; }
+/* Odd feature counts leave the 2nd column one row short, so clear the border
+   on both trailing cells for a clean bottom edge. */
+.sd-feature-row:last-child,
+.sd-feature-row:nth-last-child(2) { border-bottom: none; }
+.sd-feature-row__label {
+  color: var(--color-text-muted, #888);
+  min-width: 0;
+}
+.sd-feature-row__value {
+  font-weight: 500;
+  text-align: right;
+}
 
 .sd-no-features {
   font-size: 0.85rem;

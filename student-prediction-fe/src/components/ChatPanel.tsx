@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { apiClient } from "../api/client";
 import type { ConversationTurn } from "../api/types";
-import type { RiskAssessment } from "../types";
+import type { DataSource, PredictionType, RiskAssessment } from "../types";
 import "./ChatPanel.css";
 
 interface TextMessage {
@@ -46,12 +46,14 @@ function turnsToMessages(turns: ConversationTurn[], assessment?: RiskAssessment)
 }
 
 interface ChatPanelProps {
+  dataSource: DataSource;
+  predictionType: PredictionType;
   resumeConversationId?: string;
   resumeTurns?: ConversationTurn[];
   resumeAssessment?: RiskAssessment;
 }
 
-export function ChatPanel({ resumeConversationId, resumeTurns, resumeAssessment }: ChatPanelProps) {
+export function ChatPanel({ dataSource, predictionType, resumeConversationId, resumeTurns, resumeAssessment }: ChatPanelProps) {
   const initialMessages = resumeTurns && resumeTurns.length > 0
     ? turnsToMessages(resumeTurns, resumeAssessment)
     : [WELCOME_MESSAGE];
@@ -76,15 +78,26 @@ export function ChatPanel({ resumeConversationId, resumeTurns, resumeAssessment 
     setInput("");
     setIsThinking(true);
 
-    const response = await apiClient.predictChat({ message: text, conversationId });
-    setConversationId(response.conversationId);
+    try {
+      const response = await apiClient.predictChat({
+        message: text,
+        conversationId,
+        dataSource,
+        predictionType,
+      });
+      setConversationId(response.conversationId);
 
-    if (response.type === "need_more_info") {
-      setMessages((prev) => [...prev, { id: nextId(), kind: "text", isUser: false, text: response.question }]);
-    } else {
-      setMessages((prev) => [...prev, { id: nextId(), kind: "result", result: response.data }]);
+      if (response.type === "need_more_info") {
+        setMessages((prev) => [...prev, { id: nextId(), kind: "text", isUser: false, text: response.question }]);
+      } else {
+        setMessages((prev) => [...prev, { id: nextId(), kind: "result", result: response.data }]);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Không thể thực hiện đánh giá.";
+      setMessages((prev) => [...prev, { id: nextId(), kind: "text", isUser: false, text: message }]);
+    } finally {
+      setIsThinking(false);
     }
-    setIsThinking(false);
   }
 
   return (
@@ -105,11 +118,19 @@ export function ChatPanel({ resumeConversationId, resumeTurns, resumeAssessment 
                 <span className="result-card__status-pill">{msg.result.statusLabel}</span>
               </div>
               <div className="result-card__body">
+                <div className="result-card__meta">
+                  {msg.result.dataSource}.csv · {msg.result.solutionType === "ml" ? "Machine Learning" : "Rule-based Scoring"} ·{" "}
+                  {msg.result.scoreType === "probability" ? "Xác suất" : "Điểm luật chuẩn hóa"}
+                </div>
                 <div className="result-card__section-label">Recommended intervention</div>
-                <div className="result-card__recommendation">{msg.result.recommendation}</div>
+                <ul className="result-card__recommendation-list">
+                  {msg.result.recommendations.map((recommendation) => (
+                    <li key={recommendation}>{recommendation}</li>
+                  ))}
+                </ul>
                 <div className="result-card__section-label">Why</div>
                 <div className="result-card__factors">
-                  {msg.result.factors.map((factor) => (
+                  {msg.result.riskFactors.map((factor) => (
                     <div className="result-card__factor" key={factor}>
                       <span className="result-card__bullet">•</span>
                       <span>{factor}</span>

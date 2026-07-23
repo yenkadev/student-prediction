@@ -14,6 +14,8 @@ export function ContinueChat({ conversation, onBack }: ContinueChatProps) {
         ← Back
       </button>
       <ChatPanel
+        dataSource={conversation.dataSource ?? "student_dropout"}
+        predictionType={conversation.predictionType ?? "ml"}
         resumeConversationId={conversation.id}
         resumeTurns={conversation.turns}
         resumeAssessment={conversation.assessment}

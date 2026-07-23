@@ -1,0 +1,16 @@
+﻿data_source,column,observed_min,observed_max,invalid_count
+student_dropout_and_success.csv,Age at enrollment,17.0,70.0,0
+student_dropout_and_success.csv,Curricular units 1st sem (grade),0.0,18.875,0
+student_dropout_and_success.csv,Curricular units 2nd sem (grade),0.0,18.571428571428573,0
+student_dropout_and_success.csv,Curricular units 1st sem (enrolled),0.0,26.0,0
+student_dropout_and_success.csv,Curricular units 1st sem (approved),0.0,26.0,0
+student_dropout_and_success.csv,Curricular units 2nd sem (enrolled),0.0,23.0,0
+student_dropout_and_success.csv,Curricular units 2nd sem (approved),0.0,20.0,0
+student_dropout.csv,Age,17.0,29.6,0
+student_dropout.csv,GPA,0.0,4.0,0
+student_dropout.csv,Semester_GPA,0.0,4.0,0
+student_dropout.csv,CGPA,0.0,4.0,0
+student_dropout.csv,Attendance_Rate,38.2,100.0,0
+student_dropout.csv,Stress_Index,1.0,10.0,0
+student_dropout.csv,Study_Hours_per_Day,0.5,8.98,0
+student_dropout.csv,Assignment_Delay_Days,0.0,8.0,0

@@ -74,3 +74,46 @@
   color: rgba(255, 255, 255, 0.42);
   line-height: 1.5;
 }
+
+@media (max-width: 760px) {
+  .sidebar {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+  }
+
+  .sidebar__brand {
+    padding: 0 4px 8px;
+  }
+
+  .sidebar__brand svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .sidebar__title {
+    font-size: 13px;
+  }
+
+  .sidebar__subtitle,
+  .sidebar__footer {
+    display: none;
+  }
+
+  .sidebar__nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .nav-item {
+    min-width: 0;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+    padding: 7px 3px;
+    font-size: 10px;
+    line-height: 1.15;
+    text-align: center;
+  }
+}

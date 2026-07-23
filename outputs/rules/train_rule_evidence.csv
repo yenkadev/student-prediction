@@ -1,0 +1,14 @@
+﻿data_source,condition,so_dong_thoa_dieu_kien,ty_le_bo_hoc_nhom_rui_ro,ty_le_bo_hoc_nhom_con_lai,chenh_lech_phan_tram
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 2 dưới 50%,716,91.76,18.53,73.23
+student_dropout_and_success,Điểm học kỳ 2 dưới 10,552,90.58,24.9,65.68
+student_dropout_and_success,Tỷ lệ môn đạt học kỳ 1 dưới 50%,595,90.76,23.39,67.36
+student_dropout_and_success,Học phí chưa đóng đúng hạn,341,93.84,30.7,63.15
+student_dropout_and_success,Có công nợ,290,75.86,34.44,41.42
+student_dropout_and_success,Không đánh giá ít nhất 2 môn ở học kỳ 2,81,65.43,38.31,27.12
+student_dropout,GPA dưới 2.0,2715,44.9,10.01,34.89
+student_dropout,Chuyên cần dưới 75%,1407,34.68,20.74,13.94
+student_dropout,Căng thẳng từ 7 trở lên,1408,39.06,19.64,19.43
+student_dropout,Tự học dưới 2 giờ mỗi ngày,429,31.24,23.04,8.19
+student_dropout,Nộp bài trễ từ 3 ngày,1882,27.68,22.02,5.66
+student_dropout,Không có Internet,845,28.99,22.79,6.2
+student_dropout,Có công việc làm thêm,2805,25.49,22.24,3.25

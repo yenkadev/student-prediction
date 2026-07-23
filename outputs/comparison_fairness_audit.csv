@@ -1,0 +1,3 @@
+﻿data_source,test_rows,dropout_rows,same_row_ids,same_y_true,comparison_is_valid
+student_dropout_and_success,545,213,True,True,True
+student_dropout,1500,353,True,True,True

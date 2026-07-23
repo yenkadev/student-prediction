@@ -89,9 +89,6 @@ export function Dashboard({ onStartChat, onStartUpload, onSelectStudent, onViewB
     }
   }
 
-  const isSessionClickable = (_s: RecentSessionItem) => true;
-
-
   return (
     <div className="dashboard">
       <div className="dashboard__stats">
@@ -238,7 +235,7 @@ export function Dashboard({ onStartChat, onStartUpload, onSelectStudent, onViewB
             ))}
           </div>
           {overview && overview.recentStudents.length > 0 && (
-            <button type="button" className="session-view-all" onClick={onViewAllStudents}>
+            <button type="button" className="session-view-all" onClick={() => onViewAllStudents()}>
               View all students →
             </button>
           )}

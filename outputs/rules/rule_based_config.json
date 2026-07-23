@@ -1,0 +1,35 @@
+{
+  "student_dropout_and_success": {
+    "max_score": 11,
+    "alert_threshold_raw": 2,
+    "high_threshold_raw": 6,
+    "score_normalization": "raw_score / max_score",
+    "prediction_score_is_probability": false,
+    "imputation_values_from_train": {
+      "Curricular units 1st sem (enrolled)": 6.0,
+      "Curricular units 1st sem (approved)": 6.0,
+      "Curricular units 2nd sem (enrolled)": 6.0,
+      "Curricular units 2nd sem (approved)": 5.0,
+      "Curricular units 2nd sem (grade)": 12.333333333333334,
+      "Curricular units 2nd sem (without evaluations)": 0.0,
+      "Tuition fees up to date": 1.0,
+      "Debtor": 0.0
+    }
+  },
+  "student_dropout": {
+    "max_score": 11,
+    "alert_threshold_raw": 4,
+    "high_threshold_raw": 6,
+    "score_normalization": "raw_score / max_score",
+    "prediction_score_is_probability": false,
+    "imputation_values_from_train": {
+      "GPA": 2.33,
+      "Attendance_Rate": 81.9,
+      "Stress_Index": 5.5,
+      "Study_Hours_per_Day": 3.99,
+      "Assignment_Delay_Days": 2.0,
+      "Internet_Access": "Yes",
+      "Part_Time_Job": "No"
+    }
+  }
+}

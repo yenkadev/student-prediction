@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 from typing import Literal, Union
-from .batch import RiskAssessmentSchema
+from .batch import DataSource, PredictionType, RiskAssessmentSchema
 
 
 class ChatRequest(BaseModel):
     message: str
     conversationId: str | None = None
-    predictionType: Literal["ml", "rule_based"]
+    dataSource: DataSource
+    predictionType: PredictionType
 
 
 class ChatNeedMoreInfoResponse(BaseModel):

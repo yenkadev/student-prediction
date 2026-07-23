@@ -1,0 +1,10 @@
+﻿criterion,machine_learning,rule_based
+Khả năng giải thích từng cảnh báo,Trung bình; có mức độ quan trọng đặc trưng nhưng cần diễn giải thêm,"Cao; điều kiện, điểm và khuyến nghị được trả về trực tiếp"
+Chi phí xây dựng ban đầu,"Cần tiền xử lý, huấn luyện và lựa chọn mô hình",Cần chuyên gia thiết kế và kiểm chứng luật
+Chi phí cập nhật,"Cần dữ liệu mới và huấn luyện, đánh giá lại",Có thể sửa luật trực tiếp nhưng vẫn phải đánh giá lại
+Khả năng học quan hệ từ dữ liệu,Cao hơn; trọng số được học từ train set,Hạn chế trong các điều kiện và trọng số đã khai báo
+Tính nhất quán của quyết định,Cao khi pipeline và phiên bản mô hình được cố định,Cao khi cấu hình luật và ngưỡng được cố định
+Xử lý trường hợp ngoài dự kiến,Phụ thuộc độ bao phủ của dữ liệu huấn luyện,Không phát hiện được tín hiệu chưa được viết thành luật
+Tạo nguyên nhân và khuyến nghị cá nhân,Cần thêm tầng giải thích và ánh xạ khuyến nghị,Có sẵn trong từng điều kiện luật
+Phụ thuộc chất lượng dữ liệu,Cao,Vẫn cao nhưng dễ phát hiện trường thiếu bắt buộc hơn
+Tốc độ suy luận kỳ vọng,Nhanh với các mô hình hiện tại; chưa benchmark,Rất nhanh do chỉ kiểm tra điều kiện; chưa benchmark

@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 from pydantic import BaseModel
 from app.schemas.batch import RiskAssessmentSchema
 
@@ -31,4 +31,4 @@ class StudentDetailResponse(BaseModel):
     reviewed: bool
     assessed_at: str
     assessment: RiskAssessmentSchema
-    features: Optional[AcademicFeatures] = None
+    features: Optional[dict[str, Any]] = None

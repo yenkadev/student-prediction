@@ -1,0 +1,7 @@
+name,studentId,Gender,Internet_Access,Part_Time_Job,Scholarship,Semester,Department,Parental_Education,Age,Family_Income,Study_Hours_per_Day,Attendance_Rate,Assignment_Delay_Days,Travel_Time_Minutes,Stress_Index,GPA,Semester_GPA,CGPA
+Dang Van Giang,SV101,Male,No,Yes,No,Year 3,Engineering,High School,22,32000,1.5,60,6,45,9,1.7,1.6,1.8
+Bui Thi Hoa,SV102,Female,No,Yes,No,Year 1,Business,None,19,28000,1.0,55,7,60,8,1.9,1.8,1.9
+Do Minh Khoi,SV103,Male,Yes,Yes,No,Year 2,Arts,High School,21,54000,2.2,78,3,35,6,2.4,2.3,2.5
+Ngo Thi Lan,SV104,Female,Yes,No,No,Year 3,Science,Bachelor,20,72000,2.8,84,1,25,5,2.7,2.8,2.8
+Ly Van Minh,SV105,Male,Yes,No,Yes,Year 4,CS,Master,23,150000,4.0,96,0,15,3,3.6,3.7,3.5
+Phan Thi Nga,SV106,Female,Yes,No,Yes,Year 2,CS,PhD,20,120000,3.5,92,0,20,2,3.4,3.5,3.4

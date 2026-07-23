@@ -1,0 +1,7 @@
+name,studentId,GPA,Attendance_Rate,Stress_Index,Study_Hours_per_Day,Assignment_Delay_Days,Internet_Access,Part_Time_Job
+Nguyen Van An,SV001,1.6,62,9,1.0,5,No,Yes
+Tran Thi Bich,SV002,1.9,70,7,1.5,4,Yes,Yes
+Le Minh Chau,SV003,2.3,80,6,2.5,1,Yes,No
+Pham Quoc Dat,SV004,2.7,72,5,2.0,0,Yes,No
+Vo Thi En,SV005,3.5,95,3,4.0,0,Yes,No
+Hoang Van Phuc,SV006,3.1,88,4,3.0,1,Yes,No

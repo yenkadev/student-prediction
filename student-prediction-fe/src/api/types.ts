@@ -8,9 +8,23 @@ import type { AcademicFeatures, RiskAssessment, RiskLevel, PredictedStatus, Stud
  *   GET  /predict/batch/{job_id} — poll job status
  */
 
+export type PredictionType = "ml" | "rule_based";
+
 export interface ChatRequest {
   message: string;
   conversationId?: string;
+}
+
+export interface FormRequest {
+  predictionType: PredictionType;
+  fields: Record<string, string | number>;
+  name?: string;
+  studentId?: string;
+}
+
+export interface FormResultResponse {
+  conversationId: string;
+  data: RiskAssessment;
 }
 
 export interface ChatNeedMoreInfoResponse {
@@ -53,7 +67,7 @@ export type SessionStatus = "in_progress" | "done" | "failed";
 
 export interface RecentSessionItem {
   id: string;
-  type: "chat" | "batch";
+  type: "chat" | "batch" | "form";
   label: string;
   createdAt: string;
   status: SessionStatus;
@@ -74,7 +88,7 @@ export interface StudentDetailResponse {
   id: string;
   name: string;
   studentId: string;
-  source: "batch" | "chat";
+  source: "batch" | "chat" | "form";
   reviewed: boolean;
   assessed_at: string;
   assessment: RiskAssessment;
@@ -105,6 +119,7 @@ export interface AllStudentsResponse {
 
 export interface RiskWarningApiClient {
   predictChat(request: ChatRequest): Promise<ChatResponse>;
+  predictForm(request: FormRequest): Promise<FormResultResponse>;
   submitBatch(file: File): Promise<BatchSubmitResponse>;
   getBatchJob(jobId: string): Promise<BatchJobResponse>;
   getOverview(): Promise<OverviewResponse>;

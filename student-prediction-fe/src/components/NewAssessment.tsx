@@ -2,10 +2,11 @@ import { useState } from "react";
 import type { ConversationTurn } from "../api/types";
 import type { RiskAssessment, Student } from "../types";
 import { ChatPanel } from "./ChatPanel";
+import { FormPanel } from "./FormPanel";
 import { UploadPanel } from "./UploadPanel";
 import "./NewAssessment.css";
 
-type InputMode = "chat" | "upload";
+type InputMode = "chat" | "form" | "upload";
 
 interface NewAssessmentProps {
   initialMode: InputMode;
@@ -36,6 +37,13 @@ export function NewAssessment({
         </button>
         <button
           type="button"
+          className={`mode-toggle__btn${mode === "form" ? " mode-toggle__btn--active" : ""}`}
+          onClick={() => setMode("form")}
+        >
+          Form
+        </button>
+        <button
+          type="button"
           className={`mode-toggle__btn${mode === "upload" ? " mode-toggle__btn--active" : ""}`}
           onClick={() => setMode("upload")}
         >
@@ -49,6 +57,8 @@ export function NewAssessment({
           resumeTurns={resumeTurns}
           resumeAssessment={resumeAssessment}
         />
+      ) : mode === "form" ? (
+        <FormPanel />
       ) : (
         <UploadPanel onBatchComplete={onBatchComplete} />
       )}

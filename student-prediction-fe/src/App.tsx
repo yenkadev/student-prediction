@@ -14,7 +14,7 @@ import type { RiskLevel, Student } from "./types";
 import "./App.css";
 
 export type View = "dashboard" | "new" | "batch" | "student" | "continue" | "sessions" | "students";
-type InputMode = "chat" | "upload";
+type InputMode = "chat" | "form" | "upload";
 
 const PAGE_COPY: Record<View, { title: string; subtitle: string }> = {
   dashboard: { title: "Overview", subtitle: "Snapshot of assessed students and quick actions" },

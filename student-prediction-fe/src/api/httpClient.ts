@@ -6,6 +6,8 @@ import type {
   ChatRequest,
   ChatResponse,
   ConversationDetail,
+  FormRequest,
+  FormResultResponse,
   OverviewResponse,
   RiskWarningApiClient,
   StudentDetailResponse,
@@ -37,6 +39,20 @@ export class HttpRiskWarningApiClient implements RiskWarningApiClient {
       }),
     });
     return handleResponse<ChatResponse>(res);
+  }
+
+  async predictForm(request: FormRequest): Promise<FormResultResponse> {
+    const res = await fetch(`${BASE_URL}/predict/form`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        predictionType: request.predictionType,
+        fields: request.fields,
+        name: request.name,
+        studentId: request.studentId,
+      }),
+    });
+    return handleResponse<FormResultResponse>(res);
   }
 
   async submitBatch(file: File): Promise<BatchSubmitResponse> {

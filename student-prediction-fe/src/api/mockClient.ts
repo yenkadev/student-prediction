@@ -4,6 +4,8 @@ import type {
   BatchSubmitResponse,
   ChatRequest,
   ChatResponse,
+  FormRequest,
+  FormResultResponse,
   RiskWarningApiClient,
   StudentDetailResponse,
 } from "./types";
@@ -56,6 +58,32 @@ export class MockRiskWarningApiClient implements RiskWarningApiClient {
         },
       },
       1400,
+    );
+  }
+
+  async predictForm(request: FormRequest): Promise<FormResultResponse> {
+    const high = Number(request.fields.GPA ?? 4) < 2 || Number(request.fields.Attendance_Rate ?? 100) < 70;
+    return delay<FormResultResponse>(
+      {
+        conversationId: `conv-${++conversationCounter}`,
+        data: high
+          ? {
+              statusLabel: "Dropout",
+              riskLevel: "high",
+              riskProb: 0.71,
+              recommendation:
+                "Immediate intervention required. Connect student with academic advisor and counseling services.",
+              factors: ["GPA", "Attendance_Rate", "Study_Hours_per_Day"],
+            }
+          : {
+              statusLabel: "Graduate",
+              riskLevel: "low",
+              riskProb: 0.18,
+              recommendation: "Student is on track. Continue regular academic monitoring.",
+              factors: ["GPA", "Attendance_Rate", "Stress_Index"],
+            },
+      },
+      900,
     );
   }
 

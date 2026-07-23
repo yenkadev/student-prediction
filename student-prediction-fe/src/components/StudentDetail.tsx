@@ -80,7 +80,7 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
               <div className="sd-header__name">{detail.name}</div>
               <div className="sd-header__id">ID: {detail.studentId}</div>
               <div className="sd-header__meta">
-                Assessed {formatDate(detail.assessed_at)} · via {detail.source === "batch" ? "Batch upload" : "Chat"}
+                Assessed {formatDate(detail.assessed_at)} · via {detail.source === "batch" ? "Batch upload" : detail.source === "form" ? "Form" : "Chat"}
               </div>
             </div>
             <RiskBadge level={detail.assessment.riskLevel} />

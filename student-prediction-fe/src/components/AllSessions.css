@@ -47,6 +47,7 @@
 }
 .as-row__icon--batch { background: #e8f0fe; color: #3b6fd4; }
 .as-row__icon--chat  { background: #fef3e2; color: #b8892b; }
+.as-row__icon--form  { background: #eaf4ec; color: #1f7a44; }
 
 .as-row__body {
   flex: 1;

@@ -1,0 +1,130 @@
+.form-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-panel__form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-panel__type-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-panel__type-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+.mode-toggle--sm .mode-toggle__btn {
+  font-size: 13px;
+  padding: 6px 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-field__optional {
+  font-weight: 400;
+  color: var(--color-text-faint);
+}
+
+.form-field__input {
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-surface);
+  outline: none;
+}
+
+.form-field__input:focus {
+  border-color: var(--color-accent);
+}
+
+select.form-field__input {
+  cursor: pointer;
+}
+
+.form-panel__error {
+  color: var(--color-high-text);
+  background: var(--color-high-bg);
+  border-radius: 9px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+}
+
+.form-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.form-panel__reset {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.form-panel__reset:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.form-panel__submit {
+  border: none;
+  background: var(--color-navy);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.form-panel__submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.form-panel__result {
+  align-self: stretch;
+  max-width: 100%;
+}

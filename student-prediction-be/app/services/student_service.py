@@ -40,15 +40,17 @@ async def get_student(student_id: str) -> dict | None:
     )
     if conv:
         logger.debug("[STUDENT] found in conversations id=%s", student_id)
+        source = conv.get("source", "chat")
+        default_name = "Form Assessment" if source == "form" else "Chat Assessment"
         result = {
             "id": conv["_id"],
-            "name": conv.get("studentName", "Chat Assessment"),
+            "name": conv.get("studentName", default_name),
             "studentId": conv.get("studentId", conv["_id"]),
             "reviewed": False,
             "assessed_at": conv.get("assessed_at", ""),
             "assessment": conv["assessment"],
             "features": conv.get("fields") or None,
-            "source": "chat",
+            "source": source,
         }
         return _clean_nan(result)
 

@@ -31,7 +31,7 @@ async def get_overview() -> dict:
         {"$project": {
             "_id": 0,
             "id": "$_id",
-            "name": {"$ifNull": ["$studentName", "Chat Assessment"]},
+            "name": {"$ifNull": ["$studentName", {"$cond": [{"$eq": ["$source", "form"]}, "Form Assessment", "Chat Assessment"]}]},
             "studentId": {"$ifNull": ["$studentId", "$_id"]},
             "statusLabel": "$assessment.statusLabel",
             "riskLevel": "$assessment.riskLevel",
@@ -77,8 +77,8 @@ async def get_overview() -> dict:
     chat_sessions = [
         {
             "id": conv["_id"],
-            "type": "chat",
-            "label": "Chat Assessment",
+            "type": "form" if conv.get("source") == "form" else "chat",
+            "label": "Form Assessment" if conv.get("source") == "form" else "Chat Assessment",
             "createdAt": conv.get("created_at", ""),
             "status": "done" if conv.get("assessment") else "in_progress",
             "studentCount": None,

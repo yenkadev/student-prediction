@@ -28,7 +28,7 @@ async def process_chat(
         if not conv:
             raise ValueError(f"Conversation {conversation_id} not found")
         if conv.get("predictionType") != prediction_type or conv.get("dataSource") != data_source:
-            raise ValueError("Không thể thay đổi nguồn dữ liệu hoặc giải pháp trong hội thoại đang có.")
+            raise ValueError("Cannot change the data source or solution within an existing conversation.")
     else:
         conversation_id = str(uuid.uuid4())
         conv = {

@@ -21,7 +21,7 @@ async def predict_chat(request: ChatRequest) -> dict:
     except RuntimeError as error:
         message = str(error)
         if "GEMINI_API_KEY" in message:
-            message = "Gemini chưa được cấu hình. Hãy bổ sung GEMINI_API_KEY trong file .env."
+            message = "Gemini is not configured. Add GEMINI_API_KEY to your .env file."
         raise HTTPException(status_code=503, detail=message) from error
 
 

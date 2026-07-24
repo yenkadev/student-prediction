@@ -15,6 +15,10 @@ import "./App.css";
 
 export type View = "dashboard" | "new" | "batch" | "student" | "continue" | "sessions" | "students";
 type InputMode = "chat" | "form" | "upload";
+
+// Sync batch results are not stored server-side, so we persist them in
+// localStorage to survive a page refresh. Clear them with:
+//   localStorage.removeItem("student-risk-batch-results")
 const BATCH_STORAGE_KEY = "student-risk-batch-results";
 
 function loadSavedBatch(): Student[] {
@@ -49,7 +53,7 @@ function App() {
     try {
       window.localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(batchData));
     } catch {
-      // Nếu trình duyệt hết dung lượng, kết quả vẫn được giữ trong phiên hiện tại.
+      // If storage is full, results are still kept in the current session state.
     }
   }, [batchData]);
 

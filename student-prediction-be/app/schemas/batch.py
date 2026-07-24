@@ -1,4 +1,4 @@
-"""Schema dùng chung cho kết quả đánh giá và upload theo lô."""
+"""Shared schema for assessment results and batch uploads."""
 
 from typing import Any, Literal, Optional
 
@@ -11,7 +11,7 @@ PredictedStatus = Literal["Dropout", "No Dropout", "Graduate"]
 
 
 class RiskAssessmentSchema(BaseModel):
-    # Contract chuẩn của phiên bản tích hợp hai nguồn/hai giải pháp.
+    # Standard contract of the two-source / two-solution integration.
     dataSource: DataSource
     solutionType: PredictionType
     prediction: Literal["Dropout", "No Dropout"]
@@ -21,7 +21,7 @@ class RiskAssessmentSchema(BaseModel):
     recommendations: list[str]
     scoreType: Literal["probability", "normalized_rule_score"]
 
-    # Trường tương thích với giao diện và tài liệu phiên bản cũ.
+    # Fields kept compatible with the older UI and docs.
     statusLabel: PredictedStatus
     riskProb: float = Field(ge=0.0, le=1.0)
     recommendation: str

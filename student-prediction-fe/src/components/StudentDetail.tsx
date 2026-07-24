@@ -24,14 +24,14 @@ const FEATURE_LABELS: Record<string, string> = {
   Travel_Time_Minutes: "Travel Time (min)",
   Semester_GPA: "Semester GPA",
   CGPA: "CGPA",
-  "Curricular units 1st sem (enrolled)": "Môn đăng ký học kỳ 1",
-  "Curricular units 1st sem (approved)": "Môn đạt học kỳ 1",
-  "Curricular units 2nd sem (enrolled)": "Môn đăng ký học kỳ 2",
-  "Curricular units 2nd sem (approved)": "Môn đạt học kỳ 2",
-  "Curricular units 2nd sem (grade)": "Điểm trung bình học kỳ 2",
-  "Curricular units 2nd sem (without evaluations)": "Môn không tham gia đánh giá học kỳ 2",
-  "Tuition fees up to date": "Học phí đúng hạn",
-  Debtor: "Có công nợ",
+  "Curricular units 1st sem (enrolled)": "1st sem units enrolled",
+  "Curricular units 1st sem (approved)": "1st sem units approved",
+  "Curricular units 2nd sem (enrolled)": "2nd sem units enrolled",
+  "Curricular units 2nd sem (approved)": "2nd sem units approved",
+  "Curricular units 2nd sem (grade)": "2nd sem average grade",
+  "Curricular units 2nd sem (without evaluations)": "2nd sem units without evaluations",
+  "Tuition fees up to date": "Tuition fees up to date",
+  Debtor: "Debtor",
 };
 
 const FEATURE_ORDER = Object.keys(FEATURE_LABELS);
@@ -76,7 +76,7 @@ export function StudentDetail({ studentId, batchStudent, onBack }: StudentDetail
   useEffect(() => {
     setError(null);
 
-    // Kết quả upload đồng bộ đã có đủ dữ liệu nên không cần truy vấn MongoDB.
+    // Synchronous upload results already carry all the data, so no MongoDB query is needed.
     if (batchStudent) {
       setDetail(detailFromBatch(batchStudent));
       return;
@@ -103,7 +103,7 @@ export function StudentDetail({ studentId, batchStudent, onBack }: StudentDetail
 
       {detail && (
         <>
-          {/* Thông tin nhận diện sinh viên */}
+          {/* Student identification */}
           <div className="sd-header">
             <div className="avatar avatar--lg">{initialsOf(detail.name)}</div>
             <div className="sd-header__info">
@@ -116,7 +116,7 @@ export function StudentDetail({ studentId, batchStudent, onBack }: StudentDetail
             <RiskBadge level={detail.assessment.riskLevel} />
           </div>
 
-          {/* Kết quả đánh giá rủi ro */}
+          {/* Risk assessment result */}
           <div className="sd-card">
             <div className="sd-card__title">Risk Assessment</div>
             <div className="sd-assess-grid">
@@ -171,7 +171,7 @@ export function StudentDetail({ studentId, batchStudent, onBack }: StudentDetail
             </div>
           </div>
 
-          {/* Dữ liệu đầu vào đã dùng để đánh giá */}
+          {/* Input data used for the assessment */}
           {detail.features ? (
             <div className="sd-card">
               <div className="sd-card__title">Academic Data</div>

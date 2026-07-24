@@ -9,7 +9,7 @@ _client: AsyncIOMotorClient | None = None
 def get_client() -> AsyncIOMotorClient:
     global _client
     if _client is None:
-        # Báo lỗi nhanh để giao diện không phải chờ mặc định 30 giây khi MongoDB chưa chạy.
+        # Fail fast so the UI doesn't wait the default 30 seconds when MongoDB isn't running.
         _client = AsyncIOMotorClient(
             os.getenv("MONGODB_URL", "mongodb://localhost:27017"),
             serverSelectionTimeoutMS=2000,

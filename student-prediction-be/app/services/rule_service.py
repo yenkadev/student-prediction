@@ -1,4 +1,4 @@
-"""Hai bộ luật chấm điểm rủi ro đã được chốt từ thực nghiệm."""
+"""The two risk-scoring rule sets finalized from the experiments."""
 
 import json
 import math
@@ -38,13 +38,13 @@ _config: dict[str, dict[str, Any]] | None = None
 
 
 def _load_config() -> dict[str, dict[str, Any]]:
-    """Đọc cấu hình điểm và ngưỡng đã lựa chọn trên validation set."""
+    """Load the scoring config and thresholds selected on the validation set."""
     global _config
     if _config is None:
         if not CONFIG_PATH.exists():
             raise RuntimeError(
-                "Không tìm thấy outputs/rules/rule_based_config.json. "
-                "Hãy chạy notebook Rule-based Scoring trước."
+                "outputs/rules/rule_based_config.json not found. "
+                "Run the Rule-based Scoring notebook first."
             )
         with CONFIG_PATH.open(encoding="utf-8") as file:
             _config = json.load(file)
@@ -52,45 +52,45 @@ def _load_config() -> dict[str, dict[str, Any]]:
 
 
 def required_fields(data_source: str) -> list[str]:
-    """Trả về các trường đầu vào của bộ luật tương ứng."""
+    """Return the input fields expected by the matching rule set."""
     if data_source not in REQUIRED_FIELDS:
-        raise ValueError(f"Nguồn dữ liệu không được hỗ trợ: {data_source}")
+        raise ValueError(f"Unsupported data source: {data_source}")
     return list(REQUIRED_FIELDS[data_source])
 
 
 def _is_missing(value: Any) -> bool:
-    """Nhận diện None và NaN từ dữ liệu JSON, CSV hoặc pandas."""
+    """Detect None and NaN coming from JSON, CSV or pandas data."""
     return value is None or (isinstance(value, float) and math.isnan(value))
 
 
 def _read_numeric(fields: Mapping[str, Any], field: str, data_source: str) -> float:
-    """Đọc trường số và dùng giá trị điền thiếu được học từ train khi cần."""
+    """Read a numeric field, falling back to the train-learned imputation value."""
     if field not in fields:
-        raise ValueError(f"Thiếu trường bắt buộc: {field}")
+        raise ValueError(f"Missing required field: {field}")
     value = fields[field]
     if _is_missing(value):
         value = _load_config()[data_source]["imputation_values_from_train"][field]
     try:
         return float(value)
     except (TypeError, ValueError) as error:
-        raise ValueError(f"{field} phải là một giá trị số") from error
+        raise ValueError(f"{field} must be a numeric value") from error
 
 
 def _read_yes_no(fields: Mapping[str, Any], field: str, data_source: str) -> str:
-    """Đọc trường Yes/No và chuẩn hóa chữ hoa, chữ thường."""
+    """Read a Yes/No field and normalize its casing."""
     if field not in fields:
-        raise ValueError(f"Thiếu trường bắt buộc: {field}")
+        raise ValueError(f"Missing required field: {field}")
     value = fields[field]
     if _is_missing(value):
         value = _load_config()[data_source]["imputation_values_from_train"][field]
     normalized = str(value).strip().lower()
     if normalized not in {"yes", "no"}:
-        raise ValueError(f"{field} chỉ chấp nhận 'Yes' hoặc 'No'")
+        raise ValueError(f"{field} only accepts 'Yes' or 'No'")
     return normalized
 
 
 def _score_source_1(fields: Mapping[str, Any]) -> tuple[int, list[str], list[str]]:
-    """Chấm điểm dữ liệu học vụ và tài chính của Nguồn 1."""
+    """Score the academic and financial data of Source 1."""
     source = "student_dropout_and_success"
     enrolled_1 = _read_numeric(fields, "Curricular units 1st sem (enrolled)", source)
     approved_1 = _read_numeric(fields, "Curricular units 1st sem (approved)", source)
@@ -111,49 +111,49 @@ def _score_source_1(fields: Mapping[str, Any]) -> tuple[int, list[str], list[str
 
     if ratio_2 < 0.50:
         score += 3
-        factors.append("Tỷ lệ môn đạt học kỳ 2 dưới 50%")
-        recommendations.append("Tư vấn học vụ và lập kế hoạch học lại các môn chưa đạt")
+        factors.append("2nd-semester pass rate below 50%")
+        recommendations.append("Provide academic advising and a plan to retake failed courses")
     elif ratio_2 < 0.75:
         score += 1
-        factors.append("Tỷ lệ môn đạt học kỳ 2 dưới 75%")
-        recommendations.append("Theo dõi tiến độ hoàn thành môn học trong học kỳ tiếp theo")
+        factors.append("2nd-semester pass rate below 75%")
+        recommendations.append("Monitor course completion progress next semester")
 
     if grade_2 < 10:
         score += 2
-        factors.append("Điểm trung bình học kỳ 2 dưới 10")
-        recommendations.append("Bố trí hỗ trợ học tập cho các môn có kết quả thấp")
+        factors.append("2nd-semester average grade below 10")
+        recommendations.append("Arrange academic support for low-performing courses")
     elif grade_2 < 12:
         score += 1
-        factors.append("Điểm trung bình học kỳ 2 dưới 12")
-        recommendations.append("Theo dõi kết quả học tập trong học kỳ tiếp theo")
+        factors.append("2nd-semester average grade below 12")
+        recommendations.append("Monitor academic results next semester")
 
     if ratio_1 < 0.50:
         score += 2
-        factors.append("Tỷ lệ môn đạt học kỳ 1 dưới 50%")
-        recommendations.append("Rà soát các môn nền tảng chưa đạt")
+        factors.append("1st-semester pass rate below 50%")
+        recommendations.append("Review failed foundational courses")
     elif ratio_1 < 0.75:
         score += 1
-        factors.append("Tỷ lệ môn đạt học kỳ 1 dưới 75%")
-        recommendations.append("Theo dõi việc hoàn thành các môn còn thiếu")
+        factors.append("1st-semester pass rate below 75%")
+        recommendations.append("Monitor completion of outstanding courses")
 
     if tuition_up_to_date == 0:
         score += 2
-        factors.append("Học phí chưa được đóng đúng hạn")
-        recommendations.append("Liên hệ tư vấn học phí và phương án hỗ trợ tài chính")
+        factors.append("Tuition fees not paid on time")
+        recommendations.append("Reach out about tuition advising and financial support options")
     if debtor == 1:
         score += 1
-        factors.append("Sinh viên đang có công nợ")
-        recommendations.append("Rà soát tình trạng công nợ và kế hoạch thanh toán")
+        factors.append("Student currently has outstanding debt")
+        recommendations.append("Review the debt status and a repayment plan")
     if without_evaluations >= 2:
         score += 1
-        factors.append("Không tham gia đánh giá ít nhất 2 môn ở học kỳ 2")
-        recommendations.append("Liên hệ xác minh nguyên nhân không tham gia đánh giá")
+        factors.append("Missed evaluations in at least 2 courses in the 2nd semester")
+        recommendations.append("Reach out to confirm the reason for the missed evaluations")
 
     return score, factors, recommendations
 
 
 def _score_source_2(fields: Mapping[str, Any]) -> tuple[int, list[str], list[str]]:
-    """Chấm điểm hành vi và điều kiện học tập của Nguồn 2."""
+    """Score the study behaviour and conditions of Source 2."""
     source = "student_dropout"
     gpa = _read_numeric(fields, "GPA", source)
     attendance = _read_numeric(fields, "Attendance_Rate", source)
@@ -168,52 +168,52 @@ def _score_source_2(fields: Mapping[str, Any]) -> tuple[int, list[str], list[str
     recommendations: list[str] = []
     if gpa < 2.0:
         score += 3
-        factors.append("GPA dưới 2.0")
-        recommendations.append("Tư vấn học tập và lập kế hoạch cải thiện GPA")
+        factors.append("GPA below 2.0")
+        recommendations.append("Provide academic advising and a GPA improvement plan")
     elif gpa < 2.5:
         score += 1
-        factors.append("GPA từ 2.0 đến dưới 2.5")
-        recommendations.append("Theo dõi kết quả học tập trong học kỳ tiếp theo")
+        factors.append("GPA between 2.0 and 2.5")
+        recommendations.append("Monitor academic results next semester")
     if attendance < 75:
         score += 2
-        factors.append("Tỷ lệ chuyên cần dưới 75%")
-        recommendations.append("Liên hệ sinh viên và xác định nguyên nhân nghỉ học")
+        factors.append("Attendance rate below 75%")
+        recommendations.append("Reach out to the student and identify the reason for absences")
     elif attendance < 85:
         score += 1
-        factors.append("Tỷ lệ chuyên cần từ 75% đến dưới 85%")
-        recommendations.append("Theo dõi chuyên cần và nhắc nhở đi học đầy đủ")
+        factors.append("Attendance rate between 75% and 85%")
+        recommendations.append("Monitor attendance and encourage full class attendance")
     if stress >= 7:
         score += 2
-        factors.append("Mức độ căng thẳng cao")
-        recommendations.append("Đề xuất tư vấn tâm lý và theo dõi sức khỏe tinh thần")
+        factors.append("High stress level")
+        recommendations.append("Recommend counseling and monitor mental well-being")
     elif stress >= 5:
         score += 1
-        factors.append("Mức độ căng thẳng cần theo dõi")
-        recommendations.append("Theo dõi mức độ căng thẳng định kỳ")
+        factors.append("Stress level to keep an eye on")
+        recommendations.append("Monitor the stress level regularly")
     if study_hours < 2:
         score += 1
-        factors.append("Thời gian tự học dưới 2 giờ mỗi ngày")
-        recommendations.append("Hỗ trợ xây dựng thời gian biểu học tập")
+        factors.append("Less than 2 hours of self-study per day")
+        recommendations.append("Help build a study schedule")
     if delay >= 3:
         score += 1
-        factors.append("Nộp bài trễ từ 3 ngày trở lên")
-        recommendations.append("Nhắc hạn bài và hỗ trợ kỹ năng quản lý thời gian")
+        factors.append("Assignments submitted 3 or more days late")
+        recommendations.append("Send deadline reminders and support time-management skills")
     if internet == "no":
         score += 1
-        factors.append("Không có điều kiện truy cập Internet")
-        recommendations.append("Hỗ trợ thiết bị hoặc địa điểm truy cập Internet")
+        factors.append("No reliable internet access")
+        recommendations.append("Provide a device or an internet access location")
     if part_time_job == "yes":
         score += 1
-        factors.append("Công việc làm thêm có thể ảnh hưởng việc học")
-        recommendations.append("Tư vấn cân bằng thời gian làm thêm và học tập")
+        factors.append("Part-time job may affect studies")
+        recommendations.append("Advise on balancing part-time work and studying")
     return score, factors, recommendations
 
 
 def predict(features: Mapping[str, Any], data_source: str) -> dict[str, Any]:
-    """Chấm điểm một sinh viên và áp dụng ngưỡng đã chốt trên validation set."""
+    """Score a single student and apply the thresholds fixed on the validation set."""
     missing_fields = [field for field in required_fields(data_source) if field not in features]
     if missing_fields:
-        raise ValueError(f"Thiếu trường bắt buộc cho {data_source}: {missing_fields}")
+        raise ValueError(f"Missing required fields for {data_source}: {missing_fields}")
 
     if data_source == "student_dropout_and_success":
         raw_score, factors, recommendations = _score_source_1(features)
@@ -234,8 +234,8 @@ def predict(features: Mapping[str, Any], data_source: str) -> dict[str, Any]:
         risk_level = "high"
 
     if not factors:
-        factors = ["Không phát hiện yếu tố rủi ro đáng kể"]
-        recommendations = ["Tiếp tục theo dõi định kỳ"]
+        factors = ["No significant risk factors detected"]
+        recommendations = ["Continue regular monitoring"]
 
     return {
         "prediction": "Dropout" if raw_score >= alert_threshold else "No Dropout",

@@ -15,7 +15,7 @@ app = FastAPI(title="Student Risk Warning API")
 
 app.add_middleware(
     CORSMiddleware,
-    # Cho phép hai địa chỉ Vite thường dùng khi chạy và kiểm thử trên máy cá nhân.
+    # Allow the two Vite addresses commonly used when running and testing locally.
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,13 +32,13 @@ app.include_router(prediction.router)
 
 @app.exception_handler(PyMongoError)
 async def handle_database_error(_request: Request, _error: PyMongoError) -> JSONResponse:
-    """Trả lỗi dễ hiểu cho mọi API phụ thuộc MongoDB."""
+    """Return a clear error for every API that depends on MongoDB."""
     return JSONResponse(
         status_code=503,
         content={
             "detail": (
-                "MongoDB chưa sẵn sàng. Hãy khởi động MongoDB nếu sử dụng "
-                "Overview, lịch sử, Chat hoặc batch chạy nền."
+                "MongoDB is not ready. Start MongoDB if you are using "
+                "Overview, history, Chat or background batch jobs."
             )
         },
     )

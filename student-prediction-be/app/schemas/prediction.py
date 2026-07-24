@@ -1,4 +1,4 @@
-"""Schema cho API dự đoán đồng bộ một sinh viên."""
+"""Schema for the synchronous single-student prediction API."""
 
 from typing import Any
 

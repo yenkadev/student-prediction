@@ -1,4 +1,4 @@
-"""Dự đoán bằng các pipeline Machine Learning đã được chốt trong thực nghiệm."""
+"""Prediction using the Machine Learning pipelines finalized in the experiments."""
 
 import json
 from pathlib import Path
@@ -18,13 +18,13 @@ _models: dict[str, Any] = {}
 
 
 def _load_metadata() -> dict[str, dict[str, Any]]:
-    """Đọc metadata một lần và lưu trong bộ nhớ của tiến trình backend."""
+    """Read the metadata once and cache it in the backend process memory."""
     global _metadata
     if _metadata is None:
         if not METADATA_PATH.exists():
             raise RuntimeError(
-                "Không tìm thấy outputs/models/ml_model_metadata.json. "
-                "Hãy chạy notebook Machine Learning trước."
+                "outputs/models/ml_model_metadata.json not found. "
+                "Run the Machine Learning notebook first."
             )
         with METADATA_PATH.open(encoding="utf-8") as file:
             _metadata = json.load(file)
@@ -32,35 +32,35 @@ def _load_metadata() -> dict[str, dict[str, Any]]:
 
 
 def supported_data_sources() -> tuple[str, ...]:
-    """Trả về hai nguồn dữ liệu có mô hình đã được huấn luyện."""
+    """Return the two data sources that have a trained model."""
     return tuple(_load_metadata().keys())
 
 
 def required_fields(data_source: str) -> list[str]:
-    """Trả về đúng thứ tự đặc trưng mà pipeline của một nguồn yêu cầu."""
+    """Return the exact feature order a source's pipeline expects."""
     metadata = _load_metadata()
     if data_source not in metadata:
-        raise ValueError(f"Nguồn dữ liệu không được hỗ trợ: {data_source}")
+        raise ValueError(f"Unsupported data source: {data_source}")
     return list(metadata[data_source]["feature_columns"])
 
 
 def _load_model(data_source: str):
-    """Tải lười pipeline để server vẫn khởi động được trước khi có request."""
+    """Lazily load the pipeline so the server can start before any request."""
     if data_source not in _models:
         model_path = MODEL_DIR / f"{data_source}_ml.joblib"
         if not model_path.exists():
-            raise RuntimeError(f"Không tìm thấy pipeline: {model_path}")
+            raise RuntimeError(f"Pipeline not found: {model_path}")
         _models[data_source] = joblib.load(model_path)
     return _models[data_source]
 
 
 def _humanize_feature(feature_name: str) -> str:
-    """Chuyển tên đặc trưng kỹ thuật thành chuỗi dễ đọc hơn."""
+    """Turn a technical feature name into a more readable string."""
     return feature_name.replace("_", " ").replace("  ", " ").strip()
 
 
 def _explain_with_contributions(pipeline, frame: pd.DataFrame) -> list[str]:
-    """Lấy tối đa năm đặc trưng đóng góp nhiều nhất về phía lớp Dropout."""
+    """Take up to five features contributing most towards the Dropout class."""
     preprocessor = pipeline.named_steps["preprocessor"]
     classifier = pipeline.named_steps["classifier"]
     feature_names = preprocessor.get_feature_names_out()
@@ -75,7 +75,7 @@ def _explain_with_contributions(pipeline, frame: pd.DataFrame) -> list[str]:
     elif hasattr(classifier, "feature_importances_"):
         contributions = values * classifier.feature_importances_
     else:
-        return ["Mô hình không cung cấp mức đóng góp của đặc trưng"]
+        return ["The model does not provide feature contributions"]
 
     positive_indices = np.where(contributions > 0)[0]
     if len(positive_indices) > 0:
@@ -86,28 +86,28 @@ def _explain_with_contributions(pipeline, frame: pd.DataFrame) -> list[str]:
 
 
 def _build_recommendations(factors: list[str]) -> list[str]:
-    """Ánh xạ các nhóm yếu tố sang hành động hỗ trợ có thể thực hiện."""
+    """Map groups of factors to actionable support steps."""
     recommendations: list[str] = []
     joined = " ".join(factors).lower()
     if any(token in joined for token in ["gpa", "grade", "approved", "curricular"]):
-        recommendations.append("Sắp xếp buổi tư vấn học vụ và lập kế hoạch cải thiện kết quả học tập")
+        recommendations.append("Arrange academic advising and a plan to improve academic results")
     if any(token in joined for token in ["attendance", "evaluations", "study hours"]):
-        recommendations.append("Liên hệ sinh viên để rà soát mức độ tham gia học tập")
+        recommendations.append("Reach out to the student to review their engagement in class")
     if any(token in joined for token in ["tuition", "debtor", "income", "scholarship"]):
-        recommendations.append("Rà soát nhu cầu hỗ trợ học phí hoặc tài chính")
+        recommendations.append("Review the need for tuition or financial support")
     if "stress" in joined:
-        recommendations.append("Đề xuất tư vấn tâm lý và theo dõi sức khỏe tinh thần")
+        recommendations.append("Recommend counseling and monitor mental well-being")
     if not recommendations:
-        recommendations.append("Tư vấn viên cần rà soát các yếu tố nổi bật và theo dõi sinh viên định kỳ")
+        recommendations.append("An advisor should review the top factors and monitor the student regularly")
     return list(dict.fromkeys(recommendations))
 
 
 def predict(features: dict[str, Any], data_source: str) -> dict[str, Any]:
-    """Dự đoán nguy cơ bỏ học cho một sinh viên bằng pipeline của nguồn đã chọn."""
+    """Predict dropout risk for a single student using the selected source's pipeline."""
     feature_columns = required_fields(data_source)
     missing_columns = [column for column in feature_columns if column not in features]
     if missing_columns:
-        raise ValueError(f"Thiếu trường bắt buộc cho {data_source}: {missing_columns}")
+        raise ValueError(f"Missing required fields for {data_source}: {missing_columns}")
 
     pipeline = _load_model(data_source)
     frame = pd.DataFrame([{column: features.get(column) for column in feature_columns}])

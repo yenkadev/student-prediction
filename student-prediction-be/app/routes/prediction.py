@@ -1,4 +1,4 @@
-"""API dự đoán đồng bộ không phụ thuộc MongoDB hoặc Gemini."""
+"""Synchronous prediction API that does not depend on MongoDB or Gemini."""
 
 from fastapi import APIRouter, HTTPException
 
@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/predict/single", response_model=SinglePredictionResponse)
 async def predict_single(request: SinglePredictionRequest) -> dict:
-    """Dự đoán một sinh viên bằng một trong bốn cấu hình thí nghiệm."""
+    """Predict a single student using one of the four experiment configurations."""
     try:
         return risk_service.assess(
             request.features,

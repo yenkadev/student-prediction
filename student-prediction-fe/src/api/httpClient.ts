@@ -18,12 +18,12 @@ const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? "http:/
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
-    let message = res.statusText || `Yêu cầu thất bại với mã ${res.status}`;
+    let message = res.statusText || `Request failed with status ${res.status}`;
     try {
       const body = (await res.json()) as { detail?: unknown };
       if (typeof body.detail === "string") message = body.detail;
     } catch {
-      // Giữ thông báo HTTP mặc định nếu response không phải JSON.
+      // Keep the default HTTP message if the response is not JSON.
     }
     throw new Error(message);
   }
@@ -34,7 +34,7 @@ async function requestApi(input: RequestInfo | URL, init?: RequestInit): Promise
   try {
     return await fetch(input, init);
   } catch {
-    throw new Error("Không thể kết nối backend. Hãy kiểm tra API tại http://127.0.0.1:8000/health.");
+    throw new Error("Cannot reach the backend. Check the API at http://127.0.0.1:8000/health.");
   }
 }
 

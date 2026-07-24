@@ -1,4 +1,4 @@
-"""API upload CSV/Excel cho chế độ đồng bộ và background job."""
+"""CSV/Excel upload API for both synchronous mode and background jobs."""
 
 from fastapi import APIRouter, BackgroundTasks, File, Form, HTTPException, Response, UploadFile
 
@@ -12,13 +12,13 @@ MAX_FILE_SIZE = 50 * 1024 * 1024
 
 
 def _validate_upload(filename: str, file_bytes: bytes) -> None:
-    """Kiểm tra định dạng và dung lượng file trước khi phân tích."""
+    """Validate the file format and size before analysis."""
     if not filename.lower().endswith((".csv", ".xlsx", ".xls")):
         raise HTTPException(
-            status_code=422, detail="File phải có định dạng CSV hoặc Excel."
+            status_code=422, detail="File must be in CSV or Excel format."
         )
     if len(file_bytes) > MAX_FILE_SIZE:
-        raise HTTPException(status_code=413, detail="File vượt quá giới hạn 50 MB.")
+        raise HTTPException(status_code=413, detail="File exceeds the 50 MB limit.")
 
 
 @router.post("/predict/batch/sync", response_model=BatchSyncResponse)
@@ -27,7 +27,7 @@ async def predict_batch_sync(
     dataSource: str = Form(...),
     predictionType: str = Form(...),
 ) -> BatchSyncResponse:
-    """Phân tích file ngay lập tức; phù hợp cho demo và kiểm thử không có MongoDB."""
+    """Analyze the file immediately; suitable for demos and testing without MongoDB."""
     filename = file.filename or "upload.csv"
     file_bytes = await file.read()
     _validate_upload(filename, file_bytes)
@@ -48,7 +48,7 @@ async def submit_batch(
     dataSource: str = Form(...),
     predictionType: str = Form(...),
 ) -> BatchSubmitResponse:
-    """Giữ API background job cho môi trường có MongoDB."""
+    """Keep the background-job API for environments that have MongoDB."""
     filename = file.filename or "upload.csv"
     file_bytes = await file.read()
     _validate_upload(filename, file_bytes)
@@ -72,7 +72,7 @@ async def submit_batch(
 async def get_batch_job(job_id: str) -> BatchJobResponse:
     job = await batch_service.get_job(job_id)
     if job is None:
-        raise HTTPException(status_code=404, detail=f"Không tìm thấy job {job_id}")
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
     return BatchJobResponse(
         status=job["status"],
         progress=job["progress"],
@@ -85,5 +85,5 @@ async def get_batch_job(job_id: str) -> BatchJobResponse:
 async def delete_batch_job(job_id: str) -> Response:
     result = await get_db().batch_jobs.delete_one({"_id": job_id})
     if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail=f"Không tìm thấy job {job_id}")
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
     return Response(status_code=204)

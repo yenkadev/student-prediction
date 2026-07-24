@@ -1,10 +1,11 @@
 from pydantic import BaseModel
-from typing import Any, Literal
-from .batch import RiskAssessmentSchema
+from typing import Any
+from .batch import DataSource, PredictionType, RiskAssessmentSchema
 
 
 class FormRequest(BaseModel):
-    predictionType: Literal["ml", "rule_based"]
+    dataSource: DataSource
+    predictionType: PredictionType
     fields: dict[str, Any]
     name: str | None = None
     studentId: str | None = None

@@ -17,7 +17,7 @@ class RecentStudentItem(BaseModel):
     id: str
     name: str
     studentId: str
-    statusLabel: Literal["Dropout", "Graduate"]
+    statusLabel: Literal["Dropout", "No Dropout", "Graduate"]
     riskLevel: Literal["low", "medium", "high"]
     assessedAt: str
 

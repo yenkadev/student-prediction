@@ -1,4 +1,5 @@
 import type { View } from "../App";
+import { useDevSettings } from "../devSettings";
 import "./Sidebar.css";
 
 interface NavItemProps {
@@ -27,6 +28,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ view, onNavigate }: SidebarProps) {
+  const { settings, setFlag } = useDevSettings();
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
@@ -77,6 +79,19 @@ export function Sidebar({ view, onNavigate }: SidebarProps) {
           }
         />
       </nav>
+
+      <div className="sidebar__dev">
+        <span className="sidebar__dev-label">Developer</span>
+        <label className="sidebar__dev-toggle">
+          <input
+            type="checkbox"
+            checked={settings.experimentControls}
+            onChange={(event) => setFlag("experimentControls", event.target.checked)}
+          />
+          <span className="sidebar__dev-switch" aria-hidden="true" />
+          <span className="sidebar__dev-text">Experiment controls</span>
+        </label>
+      </div>
 
       <div className="sidebar__footer">Early Academic Risk Warning System</div>
     </aside>

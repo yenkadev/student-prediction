@@ -1,0 +1,7 @@
+Student,Student ID,Predicted,Risk %,Risk Level,Recommendation
+Dang Van Giang,SV101,Dropout,94%,high,"Immediate intervention required. Connect student with academic advisor and counseling services."
+Bui Thi Hoa,SV102,Dropout,88%,high,"Immediate intervention required. Connect student with academic advisor and counseling services."
+Do Minh Khoi,SV103,Graduate,45%,medium,"Monitor closely. Schedule check-in meeting and review study plan."
+Ngo Thi Lan,SV104,Graduate,17%,low,"Student is on track. Continue regular academic monitoring."
+Ly Van Minh,SV105,Graduate,4%,low,"Student is on track. Continue regular academic monitoring."
+Phan Thi Nga,SV106,Graduate,2%,low,"Student is on track. Continue regular academic monitoring."

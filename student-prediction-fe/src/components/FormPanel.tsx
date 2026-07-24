@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { apiClient } from "../api/client";
-import type { PredictionType } from "../api/types";
-import type { RiskAssessment } from "../types";
+import type { DataSource, PredictionType, RiskAssessment } from "../types";
 import "./ChatPanel.css";
 import "./FormPanel.css";
 
@@ -19,8 +18,10 @@ interface FieldDef {
   hint?: string;
 }
 
-// Field metadata mirrors the training data (see BE gemini.ML_FIELDS /
-// RULE_BASED_FIELDS and data/student_dropout.csv value ranges).
+// Field metadata mirrors the training data (see BE risk_service.required_fields
+// and data/student_dropout.csv value ranges). Manual entry is only offered for
+// the student_dropout source; student_dropout_and_success has 34 features and is
+// handled via Upload instead.
 const FIELD_DEFS: Record<string, FieldDef> = {
   Gender: { name: "Gender", label: "Gender", type: "select", options: ["Male", "Female"] },
   Internet_Access: { name: "Internet_Access", label: "Internet access", type: "select", options: ["Yes", "No"] },
@@ -62,8 +63,12 @@ function fieldsFor(predictionType: PredictionType): FieldDef[] {
   return order.map((name) => FIELD_DEFS[name]);
 }
 
-export function FormPanel() {
-  const [predictionType, setPredictionType] = useState<PredictionType>("rule_based");
+interface FormPanelProps {
+  dataSource: DataSource;
+  predictionType: PredictionType;
+}
+
+export function FormPanel({ dataSource, predictionType }: FormPanelProps) {
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [values, setValues] = useState<Record<string, string>>({});
@@ -71,7 +76,23 @@ export function FormPanel() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RiskAssessment | null>(null);
 
+  const supportsManualEntry = dataSource === "student_dropout";
   const fields = useMemo(() => fieldsFor(predictionType), [predictionType]);
+
+  if (!supportsManualEntry) {
+    return (
+      <div className="form-panel">
+        <div className="form-panel__notice">
+          <span className="form-panel__notice-title">Manual entry isn't available for this dataset</span>
+          <p>
+            <code>student_dropout_and_success.csv</code> has 34 features, so manual form entry isn't
+            practical. Switch to <strong>Upload file</strong> to assess this dataset, or select the{" "}
+            <code>student_dropout</code> source in the experiment controls.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   function setValue(fieldName: string, value: string) {
     setValues((prev) => ({ ...prev, [fieldName]: value }));
@@ -105,6 +126,7 @@ export function FormPanel() {
     setResult(null);
     try {
       const response = await apiClient.predictForm({
+        dataSource,
         predictionType,
         fields: payload,
         name: name.trim() || undefined,
@@ -121,26 +143,6 @@ export function FormPanel() {
   return (
     <div className="form-panel">
       <form className="form-panel__form" onSubmit={handleSubmit}>
-        <div className="form-panel__type-row">
-          <span className="form-panel__type-label">Model</span>
-          <div className="mode-toggle mode-toggle--sm">
-            <button
-              type="button"
-              className={`mode-toggle__btn${predictionType === "rule_based" ? " mode-toggle__btn--active" : ""}`}
-              onClick={() => { setPredictionType("rule_based"); setResult(null); }}
-            >
-              Rule-based
-            </button>
-            <button
-              type="button"
-              className={`mode-toggle__btn${predictionType === "ml" ? " mode-toggle__btn--active" : ""}`}
-              onClick={() => { setPredictionType("ml"); setResult(null); }}
-            >
-              ML model
-            </button>
-          </div>
-        </div>
-
         <div className="form-grid">
           <label className="form-field">
             <span className="form-field__label">Student name <span className="form-field__optional">(optional)</span></span>

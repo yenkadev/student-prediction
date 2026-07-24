@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../api/client";
 import type { StudentDetailResponse } from "../api/types";
+import type { Student } from "../types";
 import { initialsOf } from "../types";
 import { RiskBadge } from "./RiskBadge";
 import "./StudentDetail.css";
@@ -23,6 +24,14 @@ const FEATURE_LABELS: Record<string, string> = {
   Travel_Time_Minutes: "Travel Time (min)",
   Semester_GPA: "Semester GPA",
   CGPA: "CGPA",
+  "Curricular units 1st sem (enrolled)": "Môn đăng ký học kỳ 1",
+  "Curricular units 1st sem (approved)": "Môn đạt học kỳ 1",
+  "Curricular units 2nd sem (enrolled)": "Môn đăng ký học kỳ 2",
+  "Curricular units 2nd sem (approved)": "Môn đạt học kỳ 2",
+  "Curricular units 2nd sem (grade)": "Điểm trung bình học kỳ 2",
+  "Curricular units 2nd sem (without evaluations)": "Môn không tham gia đánh giá học kỳ 2",
+  "Tuition fees up to date": "Học phí đúng hạn",
+  Debtor: "Có công nợ",
 };
 
 const FEATURE_ORDER = Object.keys(FEATURE_LABELS);
@@ -43,23 +52,44 @@ function formatValue(val: unknown): string {
 
 interface StudentDetailProps {
   studentId: string;
+  batchStudent?: Student;
   onBack: () => void;
 }
 
-export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
+function detailFromBatch(student: Student): StudentDetailResponse {
+  return {
+    id: student.id,
+    name: student.name,
+    studentId: student.studentId,
+    source: "batch",
+    reviewed: student.reviewed ?? false,
+    assessed_at: student.assessed_at ?? "",
+    assessment: student.assessment,
+    features: student.features ?? null,
+  };
+}
+
+export function StudentDetail({ studentId, batchStudent, onBack }: StudentDetailProps) {
   const [detail, setDetail] = useState<StudentDetailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setDetail(null);
     setError(null);
+
+    // Kết quả upload đồng bộ đã có đủ dữ liệu nên không cần truy vấn MongoDB.
+    if (batchStudent) {
+      setDetail(detailFromBatch(batchStudent));
+      return;
+    }
+
+    setDetail(null);
     apiClient
       .getStudent(studentId)
       .then(setDetail)
       .catch((err: unknown) =>
         setError(err instanceof Error ? err.message : "Failed to load student")
       );
-  }, [studentId]);
+  }, [studentId, batchStudent]);
 
   return (
     <div className="student-detail">
@@ -73,7 +103,7 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
 
       {detail && (
         <>
-          {/* Header */}
+          {/* Thông tin nhận diện sinh viên */}
           <div className="sd-header">
             <div className="avatar avatar--lg">{initialsOf(detail.name)}</div>
             <div className="sd-header__info">
@@ -86,7 +116,7 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
             <RiskBadge level={detail.assessment.riskLevel} />
           </div>
 
-          {/* Risk Assessment card */}
+          {/* Kết quả đánh giá rủi ro */}
           <div className="sd-card">
             <div className="sd-card__title">Risk Assessment</div>
             <div className="sd-assess-grid">
@@ -98,8 +128,20 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
                 <div className="sd-assess-item__label">Risk level</div>
                 <div className="sd-assess-item__value sd-assess-item__value--capitalize">{detail.assessment.riskLevel}</div>
               </div>
+              <div className="sd-assess-item">
+                <div className="sd-assess-item__label">Data source</div>
+                <div className="sd-assess-item__value">{detail.assessment.dataSource}.csv</div>
+              </div>
+              <div className="sd-assess-item">
+                <div className="sd-assess-item__label">Solution</div>
+                <div className="sd-assess-item__value">
+                  {detail.assessment.solutionType === "ml" ? "Machine Learning" : "Rule-based Scoring"}
+                </div>
+              </div>
               <div className="sd-assess-item sd-assess-item--full">
-                <div className="sd-assess-item__label">Risk probability</div>
+                <div className="sd-assess-item__label">
+                  {detail.assessment.scoreType === "probability" ? "Risk probability" : "Normalized rule score"}
+                </div>
                 <div className="sd-prob-row">
                   <div className="sd-prob-track">
                     <div
@@ -112,12 +154,16 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
               </div>
               <div className="sd-assess-item sd-assess-item--full">
                 <div className="sd-assess-item__label">Recommendation</div>
-                <div className="sd-assess-item__value">{detail.assessment.recommendation}</div>
+                <ul className="sd-factors">
+                  {detail.assessment.recommendations.map((recommendation) => (
+                    <li key={recommendation}>{recommendation}</li>
+                  ))}
+                </ul>
               </div>
               <div className="sd-assess-item sd-assess-item--full">
                 <div className="sd-assess-item__label">Key risk factors</div>
                 <ul className="sd-factors">
-                  {detail.assessment.factors.map((f) => (
+                  {detail.assessment.riskFactors.map((f) => (
                     <li key={f}>{f}</li>
                   ))}
                 </ul>
@@ -125,7 +171,7 @@ export function StudentDetail({ studentId, onBack }: StudentDetailProps) {
             </div>
           </div>
 
-          {/* Academic Data card */}
+          {/* Dữ liệu đầu vào đã dùng để đánh giá */}
           {detail.features ? (
             <div className="sd-card">
               <div className="sd-card__title">Academic Data</div>

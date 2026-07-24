@@ -1,4 +1,4 @@
-import type { AcademicFeatures, RiskAssessment, RiskLevel, PredictedStatus, Student } from "../types";
+import type { AcademicFeatures, DataSource, PredictionType, RiskAssessment, RiskLevel, PredictedStatus, Student } from "../types";
 
 /**
  * Contract mirrors the proposed BE Service API (see
@@ -8,14 +8,15 @@ import type { AcademicFeatures, RiskAssessment, RiskLevel, PredictedStatus, Stud
  *   GET  /predict/batch/{job_id} — poll job status
  */
 
-export type PredictionType = "ml" | "rule_based";
-
 export interface ChatRequest {
   message: string;
   conversationId?: string;
+  dataSource: DataSource;
+  predictionType: PredictionType;
 }
 
 export interface FormRequest {
+  dataSource: DataSource;
   predictionType: PredictionType;
   fields: Record<string, string | number>;
   name?: string;
@@ -43,6 +44,15 @@ export type ChatResponse = ChatNeedMoreInfoResponse | ChatResultResponse;
 
 export interface BatchSubmitResponse {
   jobId: string;
+}
+
+export interface AssessmentOptions {
+  dataSource: DataSource;
+  predictionType: PredictionType;
+}
+
+export interface BatchSyncResponse {
+  results: Student[];
 }
 
 export type BatchJobStatus = "processing" | "done" | "failed";
@@ -102,6 +112,8 @@ export interface ConversationTurn {
 
 export interface ConversationDetail {
   id: string;
+  dataSource?: DataSource;
+  predictionType?: PredictionType;
   turns: ConversationTurn[];
   fields: Record<string, unknown>;
   assessment?: RiskAssessment;
@@ -120,7 +132,7 @@ export interface AllStudentsResponse {
 export interface RiskWarningApiClient {
   predictChat(request: ChatRequest): Promise<ChatResponse>;
   predictForm(request: FormRequest): Promise<FormResultResponse>;
-  submitBatch(file: File): Promise<BatchSubmitResponse>;
+  submitBatch(file: File, options: AssessmentOptions): Promise<BatchSyncResponse>;
   getBatchJob(jobId: string): Promise<BatchJobResponse>;
   getOverview(): Promise<OverviewResponse>;
   getStudent(id: string): Promise<StudentDetailResponse>;

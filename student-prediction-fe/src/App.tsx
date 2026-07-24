@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { apiClient } from "./api/client";
 import type { ConversationDetail } from "./api/types";
 import { AllSessions } from "./components/AllSessions";
@@ -15,6 +15,16 @@ import "./App.css";
 
 export type View = "dashboard" | "new" | "batch" | "student" | "continue" | "sessions" | "students";
 type InputMode = "chat" | "form" | "upload";
+const BATCH_STORAGE_KEY = "student-risk-batch-results";
+
+function loadSavedBatch(): Student[] {
+  try {
+    const value = window.localStorage.getItem(BATCH_STORAGE_KEY);
+    return value ? (JSON.parse(value) as Student[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 const PAGE_COPY: Record<View, { title: string; subtitle: string }> = {
   dashboard: { title: "Overview", subtitle: "Snapshot of assessed students and quick actions" },
@@ -29,11 +39,19 @@ const PAGE_COPY: Record<View, { title: string; subtitle: string }> = {
 function App() {
   const [view, setView] = useState<View>("dashboard");
   const [newAssessmentMode, setNewAssessmentMode] = useState<InputMode>("chat");
-  const [batchData, setBatchData] = useState<Student[]>([]);
+  const [batchData, setBatchData] = useState<Student[]>(loadSavedBatch);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [prevView, setPrevView] = useState<View>("dashboard");
   const [resumeConversation, setResumeConversation] = useState<ConversationDetail | null>(null);
   const [studentsFilter, setStudentsFilter] = useState<RiskLevel | undefined>(undefined);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(batchData));
+    } catch {
+      // Nếu trình duyệt hết dung lượng, kết quả vẫn được giữ trong phiên hiện tại.
+    }
+  }, [batchData]);
 
   function goToNewChat() {
     setResumeConversation(null);
@@ -69,6 +87,10 @@ function App() {
     setSelectedStudentId(id);
     setView("student");
   }
+
+  const selectedBatchStudent = selectedStudentId
+    ? batchData.find((student) => student.id === selectedStudentId)
+    : undefined;
 
   function goBack() {
     setView(prevView);
@@ -129,7 +151,11 @@ function App() {
             />
           )}
           {view === "student" && selectedStudentId && (
-            <StudentDetail studentId={selectedStudentId} onBack={goBack} />
+            <StudentDetail
+              studentId={selectedStudentId}
+              batchStudent={selectedBatchStudent}
+              onBack={goBack}
+            />
           )}
         </main>
       </div>

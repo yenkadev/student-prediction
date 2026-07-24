@@ -12,3 +12,4 @@ shap
 optuna
 scikit-learn
 joblib
+httpx

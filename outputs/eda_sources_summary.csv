@@ -1,0 +1,3 @@
+﻿data_source,rows,columns,duplicate_rows,missing_values
+student_dropout_and_success.csv,4424,35,0,0
+student_dropout.csv,10000,19,0,2011

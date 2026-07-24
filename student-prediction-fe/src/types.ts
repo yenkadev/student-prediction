@@ -1,4 +1,6 @@
 export type RiskLevel = "low" | "medium" | "high";
+export type DataSource = "student_dropout_and_success" | "student_dropout";
+export type PredictionType = "ml" | "rule_based";
 
 export interface AcademicFeatures {
   GPA?: number | null;
@@ -20,12 +22,19 @@ export interface AcademicFeatures {
   CGPA?: number | null;
 }
 
-export type PredictedStatus = "Dropout" | "Enrolled" | "Graduate";
+export type PredictedStatus = "Dropout" | "No Dropout" | "Enrolled" | "Graduate";
 
 export interface RiskAssessment {
+  dataSource: DataSource;
+  solutionType: PredictionType;
+  prediction: "Dropout" | "No Dropout";
+  riskScore: number;
   statusLabel: PredictedStatus;
   riskLevel: RiskLevel;
   riskProb: number;
+  scoreType: "probability" | "normalized_rule_score";
+  recommendations: string[];
+  riskFactors: string[];
   recommendation: string;
   factors: string[];
 }
@@ -36,6 +45,8 @@ export interface Student {
   studentId: string;
   reviewed?: boolean;
   assessment: RiskAssessment;
+  assessed_at?: string;
+  features?: Record<string, unknown> | null;
 }
 
 export function riskLevelFromProb(prob: number): RiskLevel {

@@ -17,6 +17,31 @@
   gap: 20px;
 }
 
+.form-panel__notice {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 22px;
+  color: var(--color-text-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.form-panel__notice-title {
+  display: block;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-panel__notice code {
+  background: var(--color-border-soft);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 12.5px;
+}
+
 .form-panel__type-row {
   display: flex;
   align-items: center;

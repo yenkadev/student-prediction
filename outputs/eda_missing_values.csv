@@ -1,0 +1,5 @@
+﻿data_source,column,missing_count,missing_percent
+student_dropout.csv,Family_Income,500,5.0
+student_dropout.csv,Study_Hours_per_Day,500,5.0
+student_dropout.csv,Stress_Index,500,5.0
+student_dropout.csv,Parental_Education,511,5.11

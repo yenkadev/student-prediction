@@ -1,7 +1,10 @@
+"""Đọc CSV/Excel và đánh giá đồng bộ hoặc bất đồng bộ theo lô."""
+
 import io
 import math
 import uuid
 from datetime import datetime, timezone
+from typing import Any
 
 import pandas as pd
 
@@ -9,107 +12,130 @@ from app.db.client import get_db
 from app.services import risk_service
 
 
-def _to_native(val):
-    """Convert numpy/pandas scalar to a native Python type for MongoDB BSON.
-    NaN → None so it serialises to JSON null instead of crashing FastAPI."""
-    v = val.item() if hasattr(val, "item") else val
-    if isinstance(v, float) and math.isnan(v):
+def _to_native(value: Any) -> Any:
+    """Chuyển scalar của numpy/pandas sang kiểu Python và đổi NaN thành None."""
+    native = value.item() if hasattr(value, "item") else value
+    if isinstance(native, float) and math.isnan(native):
         return None
-    return v
-
-ML_REQUIRED = [
-    "name", "studentId", "Gender", "Internet_Access", "Part_Time_Job",
-    "Scholarship", "Semester", "Department", "Parental_Education",
-    "Age", "Family_Income", "Study_Hours_per_Day", "Attendance_Rate",
-    "Assignment_Delay_Days", "Travel_Time_Minutes", "Stress_Index",
-    "GPA", "Semester_GPA", "CGPA"
-]
-RULE_BASED_REQUIRED = [
-    "name", "studentId", "GPA", "Attendance_Rate", "Stress_Index",
-    "Study_Hours_per_Day", "Assignment_Delay_Days", "Internet_Access", "Part_Time_Job"
-]
+    return native
 
 
-async def create_job(prediction_type: str, filename: str) -> str:
-    """Create a new batch job document. Returns job_id."""
-    db = get_db()
-    job_id = str(uuid.uuid4())
-    await db.batch_jobs.insert_one({
-        "_id": job_id,
-        "status": "processing",
-        "progress": 0,
-        "predictionType": prediction_type,
-        "filename": filename,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "results": [],
-        "error": None,
-    })
-    return job_id
+def parse_file(file_bytes: bytes, filename: str) -> pd.DataFrame:
+    """Đọc CSV hoặc Excel từ nội dung upload."""
+    lower_name = filename.lower()
+    if lower_name.endswith((".xlsx", ".xls")):
+        return pd.read_excel(io.BytesIO(file_bytes))
+    return pd.read_csv(io.BytesIO(file_bytes))
 
 
-async def process_job(job_id: str, file_bytes: bytes, filename: str, prediction_type: str) -> None:
-    """
-    Background task: parse CSV/Excel, run risk assessment per row, update job in MongoDB.
-    """
-    db = get_db()
+def assess_dataframe(
+    frame: pd.DataFrame, data_source: str, prediction_type: str
+) -> list[dict[str, Any]]:
+    """Đánh giá mọi dòng và trả về danh sách sinh viên theo schema API."""
+    required = risk_service.required_fields(data_source, prediction_type)
+    missing_columns = [column for column in required if column not in frame.columns]
+    if missing_columns:
+        preview = ", ".join(missing_columns[:6])
+        remaining = len(missing_columns) - 6
+        suffix = f" và {remaining} cột khác" if remaining > 0 else ""
+        raise ValueError(
+            f"File không đúng cấu trúc của {data_source}. "
+            f"Thiếu {len(missing_columns)} cột bắt buộc: {preview}{suffix}."
+        )
+    if frame.empty:
+        raise ValueError("File upload không có dòng dữ liệu.")
 
-    try:
-        # Parse file
-        if filename.endswith((".xlsx", ".xls")):
-            df = pd.read_excel(io.BytesIO(file_bytes))
-        else:
-            df = pd.read_csv(io.BytesIO(file_bytes))
+    results: list[dict[str, Any]] = []
+    for index, row in frame.iterrows():
+        features = {column: _to_native(row[column]) for column in required}
+        assessment = risk_service.assess(features, prediction_type, data_source)
 
-        # Validate required columns
-        required = ML_REQUIRED if prediction_type == "ml" else RULE_BASED_REQUIRED
-        missing_cols = [c for c in required if c not in df.columns]
-        if missing_cols:
-            await db.batch_jobs.update_one(
-                {"_id": job_id},
-                {"$set": {"status": "failed", "error": f"Missing columns: {missing_cols}"}}
-            )
-            return
+        # Chấp nhận file nghiên cứu không có name/studentId bằng cách tạo định danh ổn định.
+        raw_student_id = row.get("studentId")
+        if _to_native(raw_student_id) is None:
+            raw_student_id = row.get("Student_ID")
+        if _to_native(raw_student_id) is None:
+            raw_student_id = row.get("row_id")
+        if _to_native(raw_student_id) is None:
+            raw_student_id = index + 1
+        student_id = str(_to_native(raw_student_id))
 
-        total = len(df)
-        results = []
-
-        for i, row in df.iterrows():
-            feature_cols = [c for c in required if c not in ("name", "studentId")]
-            fields = {col: row[col] for col in feature_cols}
-            assessment = risk_service.assess(fields, prediction_type)
-            results.append({
+        raw_name = _to_native(row.get("name"))
+        name = str(raw_name) if raw_name is not None else f"Sinh viên {student_id}"
+        results.append(
+            {
                 "id": str(uuid.uuid4()),
-                "name": str(row["name"]),
-                "studentId": str(row["studentId"]),
+                "name": name,
+                "studentId": student_id,
                 "reviewed": False,
                 "assessment": assessment,
                 "assessed_at": datetime.now(timezone.utc).isoformat(),
-                "features": {col: _to_native(fields[col]) for col in fields},
-            })
-            progress = int((i + 1) / total * 100)  # type: ignore[operator]
-            await db.batch_jobs.update_one(
-                {"_id": job_id},
-                {"$set": {"progress": progress}}
-            )
-
-        await db.batch_jobs.update_one(
-            {"_id": job_id},
-            {"$set": {
-                "status": "done",
-                "progress": 100,
-                "results": results,
-                "completed_at": datetime.now(timezone.utc).isoformat(),
-            }}
+                "features": features,
+            }
         )
+    return results
 
-    except Exception as e:
+
+def assess_file(
+    file_bytes: bytes, filename: str, data_source: str, prediction_type: str
+) -> list[dict[str, Any]]:
+    """Hàm thuần dùng chung cho API đồng bộ và background job."""
+    frame = parse_file(file_bytes, filename)
+    return assess_dataframe(frame, data_source, prediction_type)
+
+
+async def create_job(
+    prediction_type: str, data_source: str, filename: str
+) -> str:
+    """Tạo background job trong MongoDB và trả về mã job."""
+    risk_service.validate_selection(data_source, prediction_type)
+    db = get_db()
+    job_id = str(uuid.uuid4())
+    await db.batch_jobs.insert_one(
+        {
+            "_id": job_id,
+            "status": "processing",
+            "progress": 0,
+            "predictionType": prediction_type,
+            "dataSource": data_source,
+            "filename": filename,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "results": [],
+            "error": None,
+        }
+    )
+    return job_id
+
+
+async def process_job(
+    job_id: str,
+    file_bytes: bytes,
+    filename: str,
+    prediction_type: str,
+    data_source: str,
+) -> None:
+    """Xử lý background job và lưu kết quả vào MongoDB."""
+    db = get_db()
+    try:
+        results = assess_file(file_bytes, filename, data_source, prediction_type)
         await db.batch_jobs.update_one(
             {"_id": job_id},
-            {"$set": {"status": "failed", "error": str(e)}}
+            {
+                "$set": {
+                    "status": "done",
+                    "progress": 100,
+                    "results": results,
+                    "completed_at": datetime.now(timezone.utc).isoformat(),
+                }
+            },
+        )
+    except Exception as error:
+        await db.batch_jobs.update_one(
+            {"_id": job_id},
+            {"$set": {"status": "failed", "error": str(error)}},
         )
 
 
 async def get_job(job_id: str) -> dict | None:
-    """Fetch job document by id."""
-    db = get_db()
-    return await db.batch_jobs.find_one({"_id": job_id})
+    """Đọc background job theo mã định danh."""
+    return await get_db().batch_jobs.find_one({"_id": job_id})

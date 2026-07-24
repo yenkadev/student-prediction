@@ -95,6 +95,10 @@
   padding: 9px 16px;
   border-radius: 8px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .batch-table {
@@ -157,6 +161,13 @@
 
 .batch-row__predicted {
   color: #4a4f5c;
+}
+
+.batch-row__method {
+  margin-top: 3px;
+  color: var(--color-text-faint);
+  font-size: 10.5px;
+  line-height: 1.35;
 }
 
 .batch-row__recommendation {
@@ -240,4 +251,36 @@
   background: #e8f5e9;
   border-color: #27ae60;
   color: #27ae60;
+}
+
+@media (max-width: 760px) {
+  .batch-toolbar,
+  .batch-toolbar__left {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filter-group {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .filter-btn {
+    padding: 7px 5px;
+  }
+
+  .sort-btn,
+  .export-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .batch-table {
+    overflow-x: auto;
+  }
+
+  .batch-table__head,
+  .batch-row {
+    min-width: 720px;
+  }
 }

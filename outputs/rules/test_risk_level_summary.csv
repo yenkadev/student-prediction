@@ -1,0 +1,7 @@
+﻿data_source,risk_level,student_count,dropout_count,dropout_rate
+student_dropout_and_success,high,151,136,0.9006622516556292
+student_dropout_and_success,low,298,13,0.0436241610738255
+student_dropout_and_success,medium,96,64,0.6666666666666666
+student_dropout,high,387,202,0.5219638242894057
+student_dropout,low,720,56,0.07777777777777778
+student_dropout,medium,393,95,0.24173027989821882

@@ -11,6 +11,7 @@ async def predict_form(request: FormRequest) -> dict:
         return await form_service.process_form(
             fields=request.fields,
             prediction_type=request.predictionType,
+            data_source=request.dataSource,
             name=request.name,
             student_id=request.studentId,
         )
